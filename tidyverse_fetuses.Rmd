@@ -1,7 +1,7 @@
 ---
 title: "Importing and Cleaning Data in the R tidyverse"
 output:
-  html_fragment:
+  html_document:
     keep_md: TRUE
 ---
 
