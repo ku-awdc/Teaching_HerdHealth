@@ -38,3 +38,4 @@ rsconnect/
 # Data file:
 calf_fetuses.xlsx
 .DS_Store
+tidyverse_fetuses_files/*
