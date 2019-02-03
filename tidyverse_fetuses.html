@@ -283,7 +283,7 @@ $(document).ready(function () {
 <li><p>num: This variable is numeric, so we can do things like take the mean, range etc. This can also be called integer (int) or double (dbl) but you can think of these as being the same thing as numeric.</p></li>
 <li><p>chr: This variable is a character, or text string. Variables are often read in as text, but this isn’t actually a very useful format so we usually want to convert these into something else (see the next section).</p></li>
 <li><p>Factor: This variable is a factor, which is what R uses to represent categorical data. A factor is a very useful format that we will be using a lot. A closely related format is Ord.factor, which means that the order of the factor levels is meaningful: this is how R represents ordinal data.</p></li>
-<li><p>POSIXct: This variable is a date time object, although the format may be shown as simply the date (in which case the time is implicitly 00:00). If we have a column formatted either as a date or a time in Excel, then the variable will end up as POSIXct in R. Dealing with date times can be difficult as we can be caught out by time zones.</p></li>
+<li><p>POSIXct: This variable is a date time object, although the format may be shown as simply the date (in which case the time is implicitly 00:00). This is also sometimes called ‘dttm’. If we have a column formatted either as a date or a time in Excel, then the variable will end up as POSIXct in R. Dealing with date times can be difficult as we can be caught out by time zones.</p></li>
 <li><p>Date: This variable is a simpler representation of a Date, without an associated time. These are typically much easier to deal with than POSIXct variables.</p></li>
 <li><p>logi: This variable takes the values FALSE or TRUE (logical).</p></li>
 </ul>
@@ -736,10 +736,14 @@ fetuses %&gt;%
 ##     date</code></pre>
 <pre class="r"><code>ymd('2010/10/21')</code></pre>
 <pre><code>## [1] &quot;2010-10-21&quot;</code></pre>
+<pre class="r"><code>make_date(year=2010, month=10, day=21)</code></pre>
+<pre><code>## [1] &quot;2010-10-21&quot;</code></pre>
 <pre class="r"><code>dmy('21-10-2010') + weeks(1)</code></pre>
 <pre><code>## [1] &quot;2010-10-28&quot;</code></pre>
 <pre class="r"><code>mdy('10-21-2010') - ymd('2010/9/21')</code></pre>
 <pre><code>## Time difference of 30 days</code></pre>
+<pre class="r"><code>as.numeric(mdy('10-21-2010') - ymd('2010/10/14'), units='weeks')</code></pre>
+<pre><code>## [1] 1</code></pre>
 </div>
 <div id="datetimes" class="section level4">
 <h4>Date/times</h4>

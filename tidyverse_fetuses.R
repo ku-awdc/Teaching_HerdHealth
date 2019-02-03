@@ -1,5 +1,22 @@
 #' ---
 #' title: "Importing and Cleaning Data in the R tidyverse"
+#' output:
+#'   html_document:
+#'     keep_md: yes
+#'   pdf_document: default
+#'   word_document: default
+#' ---
+#' 
+## ----setup, include=FALSE------------------------------------------------
+# Seems to break purl for some reason:
+# knitr::opts_chunk$set(echo = TRUE)
+options(width = 100)
+# To create .R file:
+# knitr::purl('tidyverse_fetuses.Rmd', documentation=2)
+
+#' 
+#' ---
+#' 
 #' ##### Matt Denwood, University of Copenhagen
 #' 
 #' ---
@@ -116,7 +133,7 @@ fetuses %>% str()
 #' 
 #' - Factor:  This variable is a factor, which is what R uses to represent categorical data.  A factor is a very useful format that we will be using a lot.  A closely related format is Ord.factor, which means that the order of the factor levels is meaningful: this is how R represents ordinal data.
 #' 
-#' -  POSIXct:  This variable is a date time object, although the format may be shown as simply the date (in which case the time is implicitly 00:00).  If we have a column formatted either as a date or a time in Excel, then the variable will end up as POSIXct in R.  Dealing with date times can be difficult as we can be caught out by time zones.
+#' -  POSIXct:  This variable is a date time object, although the format may be shown as simply the date (in which case the time is implicitly 00:00).  This is also sometimes called 'dttm'. If we have a column formatted either as a date or a time in Excel, then the variable will end up as POSIXct in R.  Dealing with date times can be difficult as we can be caught out by time zones.
 #' 
 #' -  Date:  This variable is a simpler representation of a Date, without an associated time.  These are typically much easier to deal with than POSIXct variables.
 #' 
@@ -487,8 +504,10 @@ fetuses %>%
 ## ------------------------------------------------------------------------
 library('lubridate')
 ymd('2010/10/21')
+make_date(year=2010, month=10, day=21)
 dmy('21-10-2010') + weeks(1)
 mdy('10-21-2010') - ymd('2010/9/21')
+as.numeric(mdy('10-21-2010') - ymd('2010/10/14'), units='weeks')
 
 #' 
 #' #### Date/times
