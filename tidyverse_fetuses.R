@@ -1,5 +1,22 @@
 #' ---
-#' ##### Importing and Cleaning Data in the R tidyverse
+#' title: "Importing and Cleaning Data in the R tidyverse"
+#' output:
+#'  html_document:
+#'   keep_md: yes
+#'  pdf_document: default
+#'  word_document: default
+#' ---
+#' 
+## ----setup, include=FALSE------------------------------------------------
+# Seems to break purl for some reason:
+# knitr::opts_chunk$set(echo = TRUE)
+options(width = 100)
+# To create .R file:
+# knitr::purl('tidyverse_fetuses.Rmd', documentation=2)
+
+#' 
+#' ---
+#' 
 #' ##### Matt Denwood, University of Copenhagen
 #' 
 #' ---
@@ -16,13 +33,13 @@
 #' 
 #' The code starts off very simple in Section 1, but Sections 2 and 3 are a bit more advanced, so take your time and understand each step before moving onto the next.  Make sure to run every step of the code in R in the same order as it is given here; otherwise you will either get errors or different results from some of the steps. For a more complete (and even longer) introduction to tidyverse I thoroughly recommend the book 'R for Data Science':  a free online version is available from https://r4ds.had.co.nz/
 #' 
-#' For this tutorial we will assume that you have installed both the latest version of R (http://cran.r-project.org) and the latest version of RStudio (http://rstudio.org), but you do not need to have any prior experience with R.  Start by opening RStudio and creating a new R script by clicking 'File' then 'New File' then 'R Script'.  You should see a blank text file appear in the text file window in the top-left corner of R studio.  Save it (click on File, then Save) and give it a name, like 'tidy_fetuses.R'.  The RStudio window also contains three other windows: the R console (bottom left), Environment/History/Connections window (top right), and the Files/Plots/Packages/Help/Viewer window (bottom right).  You can copy code given here in 'R code chunks' like this one:
+#' For this tutorial we will assume that you have installed both the latest version of R (http://cran.r-project.org) and the latest version of RStudio (http://rstudio.org), but you do not need to have any prior experience with R.  Start by opening RStudio and creating a new R script by clicking 'File' then 'New File' then 'R Script'.  You should see a blank text file appear in the text file window in the top-left corner of R studio.  Save it (click on File, then Save) and name it 'tidy_fetuses.R' (make sure that you save this file in the same folder as the 'calf_fetuses.xlsx' data file that you have downloaded from Absalon). The RStudio window also contains three other windows: the R console (bottom left), Environment/History/Connections window (top right), and the Files/Plots/Packages/Help/Viewer window (bottom right).  You can copy code given here in 'R code chunks' like this one:
 #' 
 ## ---- eval=FALSE---------------------------------------------------------
 ## 2+4
 
 #' 
-#' ...and paste them into your tidy_fetuses.R file in the text file window within RStudio.  To run the code, place the cursor somewhere on the line you want to run, and click 'Run' (or use the keyboard shortcut control/command + enter).  You will see that RStudio copies the code from your text window (top left) and enters it into the R console (bottom left).  You can also copy the code and manually paste it into the R console, but this takes longer so practice using the 'Run' shortcut.  Avoid re-typing code directly into the R console as even the smallest typing mistake can lead to an error.
+#' ...and paste them into your (currently blank) tidy_fetuses.R script in the text file window within RStudio.  To run the code, place the cursor somewhere on the line you want to run, and click 'Run' (or use the keyboard shortcut control/command + enter).  You will see that RStudio copies the code from your text window (top left) and enters it into the R console (bottom left).  You can also copy the code and manually paste it into the R console, but this takes longer so practice using the 'Run' shortcut.  Avoid re-typing code directly into the R console as even the smallest typing mistake can lead to an error.
 #' 
 #' This document also displays the result of running these code chunks, which should match what you see when you run the code in R.  For example, the code above should give the following output in the R console window directly below the command:
 #' 
@@ -176,7 +193,7 @@ fetuses %>% summary()
 #' 
 #' ### Creating new variables
 #' 
-#' In order to be able to format our variables correctly, we need to modify the data frame we have created.  Note that we are do NOT want to modify the original Excel file, only the data frame within R.  There are several ways to do this, but here we will stick with the tidyverse approach.
+#' In order to be able to format our variables correctly, we need to modify the data frame we have created.  Note that we do NOT want to modify the original Excel file, only the data frame within R.  There are several ways to do this, but here we will stick with the tidyverse approach.
 #' 
 #' There is a very useful function called mutate() that allows us to create a new variable based on one or more existing variables within a data frame.  For example, the following code creates a new numeric variable called crl_mm based on the existing numeric variable crl_cm:
 #' 
@@ -346,7 +363,7 @@ fetuses %>%
 #' 
 #' ### Specifying factor levels
 #' 
-#' In the real world, we won't want to spend time examining all of the factors to make sure that there aren't any typos - particularly when we think the data should be correct to start with!  This can lead to errors, because we might not check as carefully as we should and therefore miss problems with the data.  So it is much better practice to tell parse_factor what to expect by using the levels argument:
+#' In the real world, we do not want to spend time examining all of the factors to make sure that there aren't any typos - particularly when we think the data should be correct to start with!  This can lead to errors, because we might not check as carefully as we should and therefore miss problems with the data.  So it is much better practice to tell parse_factor what to expect by using the levels argument:
 #' 
 ## ------------------------------------------------------------------------
 fetuses <- fetuses %>%
@@ -446,7 +463,7 @@ fetuses %>%
 	str()
 
 #' 
-#' This has been broken down into stages so that you can see what is going on.  The first step uses str_c() to create a new character variable by sticking the text 'Parity_' before the parity number, and the second step creates a factor from the character variable as we did before.  The only problem with this is that we haven't specified levels to parse_factor(), so if we have any errors in the data (e.g. a negative number for parity) then we won't detect these.  A good trick is to automatically create a wide range of possible parity levels without having to type them all out:
+#' This has been broken down into stages so that you can see what is going on.  The first step uses str_c() to create a new character variable by sticking the text 'Parity_' before the parity number, and the second step creates a factor from the character variable as we did before.  The only problem with this is that we haven't specified levels to parse_factor(), so if we have any errors in the data (e.g. a negative number for parity) then we will not detect these.  A good trick is to automatically create a wide range of possible parity levels without having to type them all out:
 #' 
 ## ------------------------------------------------------------------------
 str_c('Parity_', seq(from=1, to=10, by=1))
@@ -544,7 +561,7 @@ fetuses %>%
 #' 
 #' #### Dates
 #' 
-#' Dates are a very specific type of variable that we can do special things with, such as calculating the number of days between two dates, and extracting parts of the date e.g. the year, day of the week, month name etc.  But in order to be able to do this, R must first store the variable as a date.  When reading an Excel file using read_excel this is usually done automatically, but sometimes we can end up with a text variable that contains text representing the date (and this will always happen when reading data from a CSV file using read_csv).  In this case, we can use the parse_date function if the date is written in the ISO standard format of YYYY-MM-DD:
+#' Dates are a very specific type of variable that we can do special things with, such as calculating the number of days between two dates, and extracting parts of the date e.g. the year, day of the week, month name etc.  But in order to be able to do this, R must first store the variable as a date.  When reading an Excel file using read_excel this is usually done automatically, but sometimes we can end up with a text variable that contains text representing the date.  In this case, we can use the parse_date function if the date is written in the ISO standard format of YYYY-MM-DD:
 #' 
 ## ------------------------------------------------------------------------
 parse_date('2010-10-21')
@@ -795,7 +812,7 @@ ggplot(plotdata, aes(x=age_days, y=Length, col=Measurement)) +
 	geom_point()
 
 #' 
-#' This code has several steps:  first we extract the variables we are interested in using select(), then we add an ID variable so that we know how the rows in the new data frame relate to the rows in the fetuses_full data frame, then we use gather to convert all columns in the data into long format (with the exception of ID and age_days), then we make the plot.  You can see from the structure of plotdata that we now have 786 observations, which is exactly three times the original 262 observations because each ID is repeated three times.  This process of creating a new data frame containing the specific data that we want to plot (and in the correct format) is something we will do a lot.
+#' This code has several steps:  first we add an ID variable so that we know how the rows in the new data frame relate to the rows in the fetuses_full data frame, then we extract the variables we are interested in using select(), then we use gather to convert all columns in the data into long format (with the exception of ID and age_days), then we make the plot.  You can see from the structure of plotdata that we now have 786 observations, which is exactly three times the original 262 observations because each ID is repeated three times.  This process of creating a new data frame containing the specific data that we want to plot (and in the correct format) is something we will do a lot.
 #' 
 #' What happens if we want to add weight to the plot?  All we have to do is copy and paste the code above, and add weight_kg in the relevant place:
 #' 
@@ -838,11 +855,11 @@ ggplot(plotdata, aes(x=age_days, y=Length)) +
 #' 
 #' -  If you need to do something that you haven't done before, then try looking at the cheat sheets for either data import (https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf), data wrangling (https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf), data visualisation (https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf), or one of the other cheat sheets available via the RStudio website (https://www.rstudio.com/resources/cheatsheets/).  If you still can't find what you are looking for then you can try googling what you want to do, but be aware that you might get lots of different solutions for the same problem, and some of them will look extremely complex and/or unfamiliar.  If you include the word 'tidyverse' in your search then you are more likely to find a familiar-looking solution.
 #' 
-#' -  R script files are really just text files, so it is a good idea to stick to standard ASCII text characters - these do not include å æ or ø.  You can use these in comments with only one small drawback: you will then get asked for an encoding to use when saving the file (pick either latin1 or UTF-8).  It is important to write lots of useful comments so if you prefer to stick to danish for your comments then feel free.  But you should definitely not use å æ or ø in the R code itself, including in variable names: this can lead to problems with your code spontaneously breaking if the encoding is changed later on (this can happen just by sending the R script file over email).
+#' -  R script files are really just text files, so it is a good idea to stick to standard ASCII text characters - these do not include æ, ø or å.  You can use these in comments with only one small drawback: you will then get asked for an encoding to use when saving the file (pick either latin1 or UTF-8).  It is important to **ALWAYS** write lots of useful comments in your R scripts, so if you prefer to stick to danish for your comments then feel free.  But you should definitely not use å æ or ø in the R code itself, including in variable names: this can lead to problems with your code spontaneously breaking if the encoding is changed later on (this can happen just by sending the R script file over email).  You can always use ae, oe and aa instead of æ, ø and å.
 #' 
-#' -  When you are writing R scripts, try to make sure that the entire script file contains valid code all the way though, and that code at the start of the R script does not depend on code written further down in the script.  You should be able to clean out your environment by clicking the sweeping brush to the right of 'Import Dataset', and then re-create all of your work just by clicking on 'source'.  This ability to re-create an entire analysis from scratch at the click of a button (if for example your data changes) is a major advantage of using R.  This also means that if you re-open RStudio you are guaranteed to be able to get back to where you were just before you closed it (or it crashed, which can happen) - so it is a good idea to test this periodically to make sure that you don't get any errors.  You will also need to do this if you make a mistake and either delete something that you didn't mean to, or break a variable by e.g. using mutate to convert it to a factor but mis-typing or forgetting about one of the levels.
+#' -  When you are writing R scripts, try to make sure that the entire script file contains valid code all the way though, and that the code at the start of the R script does not depend on code written further down in the script.  You should be able to clean out your environment by clicking the sweeping brush button to the right of 'Import Dataset', and then re-create all of your work just by clicking on 'source'.  This ability to re-create an entire analysis from scratch at the click of a button (if for example your data changes) is a major advantage of using R.  This also means that if you re-open RStudio you are guaranteed to be able to get back to where you were just before you closed it (or it crashed, which can happen) - so it is a good idea to test this periodically to make sure that you don't get any errors.  You will also need to do this if you make a mistake and either delete something that you didn't mean to, or break a variable by e.g. using mutate to convert it to a factor but mis-typing or forgetting about one of the levels.
 #' 
-#' -  As a general rule, R ignores white space (including spaces and line breaks), so it doesn't really matter in terms of the code if we use them or not.  But it is MUCH easier for humans to read and understand your code if it is laid out in a consistent and clear way.  So get into the habit of putting spaces between functions and arguments, and breaking large chains of functions over separate lines.  You might still end up with some long lines, and by default you need to scroll to see these if they disappear off the right hand side of the screen.  If that annoys you, then go to the Tools menu, then Global Options, then click on the Code tab and make sure that 'Soft-wrap R source files' is checked.
+#' -  As a general rule, R ignores white space (including spaces and line breaks), so it doesn't really matter in terms of the code if we use them or not.  But it is MUCH easier for humans to read and understand your code if it is laid out in a consistent and clear way.  So get into the habit of putting spaces between functions and arguments, and breaking large chains of functions over separate lines (typically after a , or + or %>%).  You might still end up with some long lines, and by default you need to scroll to see these if they disappear off the right hand side of the screen.  If that annoys you, then go to the Tools menu, then Global Options, then click on the Code tab and make sure that 'Soft-wrap R source files' is checked - this makes sure that the width of the R script file matches the width of the text window by 'soft-wrapping' the text.
 #' 
 #' --- 
 #' 
@@ -1108,7 +1125,7 @@ fetuses %>%
 ## source("tidy_fetuses.R")
 
 #' 
-#' Now if you want to re-load and re-format the data, all you have to do is make sure that your working directory is correct then run this single line in your analysis script.  That means that you can get straight into the analysis without having to scroll through all of the code needed to read and format the data.
+#' Now if you want to re-load and re-format the data, all you have to do is make sure that your working directory is correct then run this single line in your analysis script.  That means that you can get straight into the analysis without having to scroll through all of the code needed to read and format the data.  If you get an error saying "cannot open file 'tidy_fetuses.R': No such file or directory" when running this command, then check that you saved your 'tidy_fetuses.R' file in the same folder as the 'calf_fetuses.xlsx' data file as instructed at the start of the tutorial.
 #' 
 ## ---- echo=FALSE---------------------------------------------------------
 # Check that appendix B and D give the same solution:
