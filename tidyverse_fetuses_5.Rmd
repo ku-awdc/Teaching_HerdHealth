@@ -1,0 +1,198 @@
+---
+title: "Importing and Cleaning Data in the R tidyverse 5"
+output:
+ html_document:
+  keep_md: yes
+ pdf_document: default
+ word_document: default
+---
+
+```{r setup, include=FALSE}
+# Seems to break purl for some reason:
+# knitr::opts_chunk$set(echo = TRUE)
+options(width = 80)
+# To create .R file:
+# knitr::purl('tidyverse_fetuses.Rmd', documentation=2)
+knitr::opts_knit$set(root.dir = "P:/Undervisning/Differentiering 2019/Revision_diff_undervisning/fetuses_spiral")
+
+```
+---
+
+##### Matt Denwood, University of Copenhagen
+
+---
+
+# File 5
+
+---
+
+## Appendix D:  exercise solution
+
+---
+
+To create the complete data handling code, we need to follow the 8 steps given in the tutorial:
+
+##### Step 1:  load the required packages
+
+```{r}
+library('tidyverse')
+library('readxl')
+```
+
+##### Step 2:  remember to set your working directory
+
+Go to the Session menu, then Set Working Directory, then Choose Directory.¨
+
+##### Step 3:  read the data frame into R
+```{r}
+fetuses <- read_excel('calf_fetuses.xlsx', sheet='calf_fetuses')
+```
+
+##### Step 4:  examine your data
+
+Look at the structure to identify what needs to be formatted:
+
+```{r}
+fetuses %>%
+	str()
+```
+
+Other than age_days, weight_kg, crl_cm, and head_width/length_mm we will want to turn everything into a factor.  We also want to create a new ID variable and may also want to create some factor groups based on the numeric variables.
+
+We can also automatically convert the character variables to factors and summarise, just to see what we have in the data:
+
+```{r}
+fetuses %>%
+	mutate_if(is.character, parse_factor) %>%
+	summary()
+```
+
+
+##### Step 5:  modify your data frame
+
+Create a new ID variable and turn it into a factor:
+
+```{r}
+fetuses <- fetuses %>%
+	mutate(ID = row_number()) %>%
+	mutate(ID = parse_factor(str_c('ID_', str_replace_all(format(ID),' ','0'))))
+```
+
+Turn parity into a factor and create a grouped version:
+
+```{r}
+fetuses <- fetuses %>%
+	mutate(parity = parse_factor(str_c('Parity_', parity), 
+		levels=str_c('Parity_', seq(from=1, to=10, by=1)))) %>%
+	mutate(parity_group = fct_collapse(parity, First='Parity_1', Second='Parity_2', 
+		Older=str_c('Parity_', seq(from=3, to=9, by=1)), Ancient='Parity_10')) %>%
+	mutate(parity = fct_drop(parity), parity_group = fct_drop(parity_group))
+```
+
+The age_days, weight_kg and crl_cm varibles can be left as numeric, but we might want to create some new variables based on these...
+
+Create an age group variable as a factor and crl_mm as a number:
+
+```{r}
+fetuses <- fetuses %>%
+	mutate(age_group = cut(age_days, breaks=c(0, 100, 200, 300), 
+		labels=c('Early', 'Middle', 'Late'))) %>%
+	mutate(crl_mm = crl_cm*10)
+```
+
+The head_width_mm and head_length_mm variables are OK as numeric.
+
+Convert all of the hair variables into factors one at a time:
+
+```{r}
+fetuses <- fetuses %>%
+	mutate(hair_coronary_band = parse_factor(hair_coronary_band, levels=c('N','Y'))) %>%
+	mutate(hair_coronary_band = fct_collapse(hair_coronary_band, No = 'N', Yes='Y')) %>%
+	mutate(hair_ear = parse_factor(hair_ear, levels=c('N','Y'))) %>%
+	mutate(hair_ear = fct_collapse(hair_ear, No = 'N', Yes='Y')) %>%
+	mutate(hair_eyelid = parse_factor(hair_eyelid, levels=c('N','Y'))) %>%
+	mutate(hair_eyelid = fct_collapse(hair_eyelid, No = 'N', Yes='Y')) %>%
+	mutate(hair_tail = parse_factor(hair_tail, levels=c('N','Y'))) %>%
+	mutate(hair_tail = fct_collapse(hair_tail, No = 'N', Yes='Y')) %>%
+	mutate(hair_hornbud = parse_factor(hair_hornbud, levels=c('N','Y'))) %>%
+	mutate(hair_hornbud = fct_collapse(hair_hornbud, No = 'N', Yes='Y'))
+```
+
+Convert the tactile hair variables into factors:
+
+```{r}
+fetuses <- fetuses %>%
+	mutate(tactile_muzzle = parse_factor(tactile_muzzle, levels=c('Visible','Not visible','Hairsack'))) %>%
+	mutate(tactile_eyebrow = parse_factor(tactile_eyebrow, levels=c('Visible','Not visible','Hairsack'))) %>%
+	mutate(tactile_eyelash = parse_factor(tactile_eyelash, levels=c('Visible','Not visible','Hairsack')))
+```
+
+Convert the remaining 4 variables into factors:
+
+```{r}
+fetuses <- fetuses %>%
+	mutate(eye_op_close = parse_factor(eye_op_close, levels=c('Closed','Open'))) %>%
+	mutate(papillae_tongue = parse_factor(papillae_tongue, 
+		levels=c('None','Furthest back','Large front','Whole tongue'))) %>%
+	mutate(sex = parse_factor(sex, levels=c('Female','Male','Non Diff'))) %>%
+	mutate(eyelid = parse_factor(eyelid, levels=c('N','Y'))) %>%
+	mutate(eyelid = fct_collapse(eyelid, No = 'N', Yes='Y'))
+```
+
+
+##### Step 6:  Re-examine the structure of the data frame:
+
+```{r}
+fetuses %>%
+	str()
+```
+
+The formats are all now correct - we no longer have any character variables, or numbers that should be factors.
+
+We can also re-order the data frame to keep important variables first, and related variables together:
+
+```{r}
+fetuses <- fetuses %>%
+	select(ID, sex, starts_with('parity'), starts_with('age'), weight_kg, crl_cm, crl_mm, starts_with('head'), everything())
+```
+
+Check the new order:	
+
+```{r}
+fetuses %>%
+	str()
+```
+
+##### Step 7:  examine the data
+
+A basic examination is done using summary:
+
+```{r}
+fetuses %>%
+	summary()
+```
+
+We specifically need to check for:
+
+- Are there any unexpected missing values in any of the variables?
+
+- Are there extreme observations in the numeric variables (indicated by a very low min and/or very high max?)
+
+- Do the mean and median of numeric variables look plausible?
+
+- Do the total number of observations within factor variables look plausible?
+
+A more detailed examination may require graphs!
+
+
+##### Step 8:  carry on with your data analysis
+
+It is a good idea to get into the habit of having separate R script files for data reading/formatting (i.e. steps 1-7) and data analysis.  This helps to keep your R script files shorter and therefore more manageable, and also means that several different data analyses can use the same data reading/formatting R script.  For example, you could create a new R script file and save it with the name 'analysis_fetuses.R'.  Then at the top of your new R script file put the following command:
+
+```{r, eval=FALSE}
+source("tidy_fetuses.R")
+```
+
+Now if you want to re-load and re-format the data, all you have to do is make sure that your working directory is correct then run this single line in your analysis script.  That means that you can get straight into the analysis without having to scroll through all of the code needed to read and format the data.  If you get an error saying "cannot open file 'tidy_fetuses.R': No such file or directory" when running this command, then check that you saved your 'tidy_fetuses.R' file in the same folder as the 'calf_fetuses.xlsx' data file as instructed at the start of the tutorial.
+
+---

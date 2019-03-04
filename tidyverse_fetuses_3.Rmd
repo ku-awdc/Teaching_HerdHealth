@@ -1,0 +1,234 @@
+---
+title: "Importing and Cleaning Data in the R tidyverse 3"
+output:
+ html_document:
+  keep_md: yes
+ pdf_document: default
+ word_document: default
+---
+
+```{r setup, include=FALSE}
+# Seems to break purl for some reason:
+# knitr::opts_chunk$set(echo = TRUE)
+options(width = 80)
+# To create .R file:
+# knitr::purl('tidyverse_fetuses.Rmd', documentation=2)
+knitr::opts_knit$set(root.dir = "P:/Undervisning/Differentiering 2019/Revision_diff_undervisning/fetuses_spiral")
+
+```
+
+---
+
+##### Matt Denwood, University of Copenhagen
+
+--- 
+
+# File 3
+
+## Section 2: working with different variable types
+
+---
+
+As we have seen in the previous files, we need to prepare the data for analysis. We first load the relevant libraries and the data:
+
+```{r, warning=FALSE}
+library('tidyverse')
+library('readxl')
+fetuses <- read_excel('calf_fetuses.xlsx', sheet='calf_fetuses')
+
+```
+
+And again we make a "backup" of the full dataset:
+
+```{r}
+fetuses_full <- fetuses %>%
+	mutate(crl_mm = crl_cm*10)
+```
+
+And we assign ID to the animals from the backup data:
+
+```{r}
+fetuses <- fetuses_full %>%
+	mutate(ID = row_number()) %>%
+	select(ID, parity, age_days, hair_coronary_band) %>%
+	filter(age_days >= 50)
+```
+
+Then we convert some important variables again:
+
+```{r}
+fetuses %>%
+	mutate(parity_text = str_c('Parity_', parity)) %>%
+	mutate(parity_fct = parse_factor(parity_text)) %>%
+	str()
+```
+
+And make the parity groups:
+
+```{r}
+fetuses <- fetuses %>%
+	mutate(parity_fct = parse_factor(str_c('Parity_', parity), 
+		levels=str_c('Parity_', seq(from=1, to=10, by=1)))) %>%
+	mutate(parity_group = fct_collapse(parity_fct, First='Parity_1', Second='Parity_2', 
+		Older=str_c('Parity_', seq(from=3, to=9, by=1)), Ancient='Parity_10'))
+
+fetuses %>%
+	summary()
+```
+
+And the age groups:
+
+```{r}
+fetuses <- fetuses %>%
+	mutate(age_group = cut(age_days, breaks=c(0, 100, 200, 300), labels=c('Early', 'Middle', 'Late')))
+
+fetuses %>%
+	summary()
+```
+
+
+
+
+
+## Section 3: basic data visualisation
+
+---
+
+### Basic plots
+
+We can get a lot of information using the summarise() variable, but sometimes it is better to visualise data graphically to check that the observations are consistent with what we expect.  There are several ways to make plots in R, but the tidyverse way is to use ggplot.  These plots all start with the same pattern - first we define the data frame we want to use, then we specify which variables should go on the x and y axes (as well as any variables that can be used to group by colour etc) using the aes() function, then we add the 'layers' that we want to the plot.  For example:
+
+```{r}
+ggplot(fetuses_full, aes(x=head_width_mm, y=head_length_mm)) +
+	geom_point()
+```
+
+The first line says that we want to use the fetuses_full dataset, and that we want head_width_mm on the x-axis and head_length_mm on the y-axis.  The first line doesn't tell R what type of plot we want, but it ends with a + symbol, which is a lot like the %>% operator in that it tells R that we have not completed the command.  The second line tells R that we want to add points to the plot, so we end up with a simple scatter-type plot.  We can also add a smoothed line of best fit as a second layer using:
+
+```{r}
+ggplot(fetuses_full, aes(x=head_width_mm, y=head_length_mm)) +
+	geom_point() +
+	stat_smooth()
+```
+
+There are two types of plots that are particularly useful for summarising data: histograms and box plots.  We can create these using similar code:
+
+```{r}
+ggplot(fetuses_full, aes(x=head_width_mm)) +
+	geom_histogram(binwidth=10)
+
+ggplot(fetuses_full, aes(y=head_width_mm, x=hair_coronary_band)) +
+	geom_boxplot()
+```
+
+Notice that the histogram does not need us to specify anything for the y-axis: the frequencies are automatically calculated for us.  These two plots tell us that head_width_mm is approximately normally distributed, and that it is strongly associated with the presence of hair on the coronary band.  There do not seem to be any extreme values, so there is no evidence of data entry mistakes for this variable based on these plots.
+
+We might also want to make a bar plot to check how categorical variables relate to each other.  For example:
+
+```{r}
+ggplot(fetuses_full, aes(x=hair_coronary_band)) +
+	geom_bar()
+```
+
+This tells us that most of the fetuses do not have hair on the corony band.  If we wanted to see how this related to another categorical variable, then we can create a stacked bar chart by using the fill argument to aes:
+
+```{r}
+ggplot(fetuses_full, aes(x=hair_coronary_band, fill=hair_tail)) +
+	geom_bar()
+```
+
+We will do more with plots later in the course, but if you want to read more about ggplot now then see the Data visualisation chapter of the R for Data Science book (https://r4ds.had.co.nz/data-visualisation.html).  There is also a cookbook for common plot recipes using ggplot at:  http://www.cookbook-r.com/Graphs/  
+
+---
+
+### Long and wide data
+
+Sometimes we encounter datasets that are structured in a way that might be good for data entry, but is bad for data analysis.  For example, we might have repeated observations of the same variable over time within the same individual represented as multiple columns within the worksheet:  this 'wide format' is a common way to enter the data, but makes it difficult to summarise all the observations from the same individual using R.  For example we might have the following dataset (that I will create directly in R using the tribble() function just for illustration):
+
+```{r}
+wide <- tribble(
+        ~ID, ~Time1, ~Time2, ~Time3,
+        'Ben', 78, 75, 73,
+        'Geoff', 91, 87, 89
+    )
+wide
+```
+
+Here we have 3 repeated observations of the same variable (body weight), at 3 different time points for 2 individuals.  Now let's say we want to plot these weights over time - how do we do that?  For data analysis we really want the data in 'long format', where we have a column for the ID of the individual, a column for the time point, and a single column for all of the observations.   So to create the plot, we first convert the data to long format using the gather() function:
+
+```{r}
+long <- wide %>%
+	gather(TimePoint, Weight, -ID) %>%
+	mutate(TimePoint = parse_factor(TimePoint)) %>%
+	mutate(ID = parse_factor(ID, levels=c('Ben','Geoff')))
+long
+```
+
+The first 2 arguments of the gather function allows us to specify the new column name for the grouping variable, and the new column name for the observation variable.  The grouping variable values are determined by the corresponding previous column names (in this case Time1, Time2 and Time3), and the observation variable values (the observed weights) are the observed data gathered from all of the previous columns.  The remaining arguments indicate variables (with a minus in front of the name) that we want to exclude from the gather process: these variables (in our case just one variable: ID) will be added to the resulting long data in the same format, but with rows repeated as necessary.  We then use the parse_factor function to convert the new text variable TimePoint into a factor (along with ID). Notice that we do not bother to specify the levels for the new TimePoint variable: this is because the variable is taken directly from the old column names, so there is no risk of any data entry mistakes! The result is exactly the same data, but represented differently: the wide data has the 6 observations in 3 columns of 2 rows, and the long data has the same observations in a single variable with 6 rows.  Now we can make the plot we wanted:
+
+```{r}
+ggplot(long, aes(x=TimePoint, y=Weight, col=ID, group=ID)) +
+	geom_line() +
+	geom_point()
+```
+
+The argument col=ID has been added to the aes() function so we can see which observations belong to which person, and also a new layer geom_line() which connects the observations within the group specified as group=ID within the aes() function.
+
+---
+
+The gather function also comes in handy for making similar types of plots where we want to put different variables side-by-side.  For example, we might want to look at how the head_width_mm, head_length_mm and crl_cm variables change with age_days.  We can do that one at a time using the existing data frame, for example:
+
+
+```{r}
+ggplot(fetuses_full, aes(x=age_days, y=head_width_mm)) +
+	geom_point()
+```
+
+But how do we add head_length_mm and crl_cm to this plot?  We need to convert the data into long format, and then make the plot:
+
+```{r}
+plotdata <- fetuses_full %>% 
+	mutate(ID = row_number()) %>%
+	select(ID, age_days, crl_cm, head_width_mm, head_length_mm) %>% 
+	gather(Measurement, Length, -ID, -age_days) %>%
+	mutate(Measurement = parse_factor(Measurement))
+
+str(plotdata)
+
+ggplot(plotdata, aes(x=age_days, y=Length, col=Measurement)) +
+	geom_point()
+```
+
+This code has several steps:  first we add an ID variable so that we know how the rows in the new data frame relate to the rows in the fetuses_full data frame, then we extract the variables we are interested in using select(), then we use gather to convert all columns in the data into long format (with the exception of ID and age_days), then we make the plot.  You can see from the structure of plotdata that we now have 786 observations, which is exactly three times the original 262 observations because each ID is repeated three times.  This process of creating a new data frame containing the specific data that we want to plot (and in the correct format) is something we will do a lot.
+
+What happens if we want to add weight to the plot?  All we have to do is copy and paste the code above, and add weight_kg in the relevant place:
+
+
+```{r}
+plotdata <- fetuses_full %>% 
+	mutate(ID = row_number()) %>%
+	select(ID, age_days, crl_cm, head_width_mm, head_length_mm, weight_kg) %>% 
+	gather(Measurement, Length, -ID, -age_days) %>%
+	mutate(Measurement = parse_factor(Measurement)) %>%
+	mutate(Measurement = fct_collapse(Measurement, "CRL (cm)"="crl_cm", "Head Width (mm)"="head_width_mm", "Head Length (mm)"="head_length_mm", "Weight (kg)"="weight_kg"))
+
+ggplot(plotdata, aes(x=age_days, y=Length, col=Measurement)) +
+	geom_point() +
+	xlab('Age (days)') +
+	ylab('')
+```
+
+The only addition is that the x-axis label and names of the factor levels have been changed to a more readable format, and the y-axis label has been removed as weight isn't a length! But the weight is on a different scale to the other variables so is hard to see at the bottom of the graph.  There are two ways to improve this: we could change the units of weight so that 1 y-axis value represented 100g rather than 1kg, but it is probably a better idea to put the different variables into different facets using the facet_wrap() function:
+
+```{r}
+ggplot(plotdata, aes(x=age_days, y=Length)) +
+	geom_point() +
+	xlab('Age (days)') +
+	ylab('') +
+	facet_wrap(~Measurement, scales='free_y') 
+```
+
+The facet_wrap (and related facet_grid) funtion allow us to specify one or more categorical variable on which we can stratify the plot into different sub-plots.  The scales='free_y' argument tells facet_wrap to use different y-axis scales for each variable type.
+
+If you want to read more about tidy data structure (including long vs wide formats) then see the Tidy data chapter of the R for Data Science book (https://r4ds.had.co.nz/tidy-data.html).
+

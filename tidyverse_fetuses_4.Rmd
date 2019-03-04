@@ -1,0 +1,140 @@
+---
+title: "Importing and Cleaning Data in the R tidyverse 4"
+output:
+ html_document:
+  keep_md: yes
+ pdf_document: default
+ word_document: default
+---
+
+```{r setup, include=FALSE}
+# Seems to break purl for some reason:
+# knitr::opts_chunk$set(echo = TRUE)
+options(width = 80)
+# To create .R file:
+# knitr::purl('tidyverse_fetuses.Rmd', documentation=2)
+knitr::opts_knit$set(root.dir = "P:/Undervisning/Differentiering 2019/Revision_diff_undervisning/fetuses_spiral")
+
+```
+
+---
+
+##### Matt Denwood, University of Copenhagen
+
+---
+
+# File 4
+
+---
+
+## Appendix A:  additional tips
+
+---
+
+-  Never write code from scratch when you can copy and paste working code from an example you already have.  The process for importing and formatting data is nearly always the same, and as a result the code will be largely identical with just a few changes to variable names.  If you write code from scratch then (1) it will be slower because you will have to remember how to write everything, and (2) it will be more frustrating because you will make more mistakes.  It is a good idea to keep a specific R script file handy with examples of how to do different things - you can use this document as a starting point.
+
+-  If you need to do something that you haven't done before, then try looking at the cheat sheets for either data import (https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf), data wrangling (https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf), data visualisation (https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf), or one of the other cheat sheets available via the RStudio website (https://www.rstudio.com/resources/cheatsheets/).  If you still can't find what you are looking for then you can try googling what you want to do, but be aware that you might get lots of different solutions for the same problem, and some of them will look extremely complex and/or unfamiliar.  If you include the word 'tidyverse' in your search then you are more likely to find a familiar-looking solution.
+
+-  R script files are really just text files, so it is a good idea to stick to standard ASCII text characters - these do not include æ, ø or å.  You can use these in comments with only one small drawback: you will then get asked for an encoding to use when saving the file (pick either latin1 or UTF-8).  It is important to **ALWAYS** write lots of useful comments in your R scripts, so if you prefer to stick to danish for your comments then feel free.  But you should definitely not use å æ or ø in the R code itself, including in variable names: this can lead to problems with your code spontaneously breaking if the encoding is changed later on (this can happen just by sending the R script file over email).  You can always use ae, oe and aa instead of æ, ø and å.
+
+-  When you are writing R scripts, try to make sure that the entire script file contains valid code all the way though, and that the code at the start of the R script does not depend on code written further down in the script.  You should be able to clean out your environment by clicking the sweeping brush button to the right of 'Import Dataset', and then re-create all of your work just by clicking on 'source'.  This ability to re-create an entire analysis from scratch at the click of a button (if for example your data changes) is a major advantage of using R.  This also means that if you re-open RStudio you are guaranteed to be able to get back to where you were just before you closed it (or it crashed, which can happen) - so it is a good idea to test this periodically to make sure that you don't get any errors.  You will also need to do this if you make a mistake and either delete something that you didn't mean to, or break a variable by e.g. using mutate to convert it to a factor but mis-typing or forgetting about one of the levels.
+
+-  As a general rule, R ignores white space (including spaces and line breaks), so it doesn't really matter in terms of the code if we use them or not.  But it is MUCH easier for humans to read and understand your code if it is laid out in a consistent and clear way.  So get into the habit of putting spaces between functions and arguments, and breaking large chains of functions over separate lines (typically after a , or + or %>%).  You might still end up with some long lines, and by default you need to scroll to see these if they disappear off the right hand side of the screen.  If that annoys you, then go to the Tools menu, then Global Options, then click on the Code tab and make sure that 'Soft-wrap R source files' is checked - this makes sure that the width of the R script file matches the width of the text window by 'soft-wrapping' the text.
+
+--- 
+
+## Appendix B:  exercise
+
+---
+
+```{r, echo=FALSE}
+
+library('tidyverse')
+library('readxl')
+
+fetuses <- read_excel('calf_fetuses.xlsx', sheet='calf_fetuses')
+
+# Create a new ID variable and turn it into a factor:
+fetuses <- fetuses %>%
+	mutate(ID = row_number()) %>%
+	mutate(ID = parse_factor(str_c('ID_', str_replace_all(format(ID),' ','0'))))
+
+# Turn parity into a factor and create a grouped version:
+fetuses <- fetuses %>%
+	mutate(parity = parse_factor(str_c('Parity_', parity), 
+		levels=str_c('Parity_', seq(from=1, to=10, by=1)))) %>%
+	mutate(parity_group = fct_collapse(parity, First='Parity_1', Second='Parity_2', 
+		Older=str_c('Parity_', seq(from=3, to=9, by=1)), Ancient='Parity_10')) %>%
+	mutate(parity = fct_drop(parity), parity_group = fct_drop(parity_group))
+
+# age_days, weight_kg and crl_cm can be left as numeric, but we might want
+# to create some new variables based on these...
+# Create an age group variable as a factor and crl_mm as a number:
+fetuses <- fetuses %>%
+	mutate(age_group = cut(age_days, breaks=c(0, 100, 200, 300), 
+		labels=c('Early', 'Middle', 'Late'))) %>%
+	mutate(crl_mm = crl_cm*10)
+
+# head_width_mm and head_length_mm are OK as numeric
+
+# Convert all of the hair variables into factors one at a time:
+fetuses <- fetuses %>%
+	mutate(hair_coronary_band = parse_factor(hair_coronary_band, levels=c('N','Y'))) %>%
+	mutate(hair_coronary_band = fct_collapse(hair_coronary_band, No = 'N', Yes='Y')) %>%
+	mutate(hair_ear = parse_factor(hair_ear, levels=c('N','Y'))) %>%
+	mutate(hair_ear = fct_collapse(hair_ear, No = 'N', Yes='Y')) %>%
+	mutate(hair_eyelid = parse_factor(hair_eyelid, levels=c('N','Y'))) %>%
+	mutate(hair_eyelid = fct_collapse(hair_eyelid, No = 'N', Yes='Y')) %>%
+	mutate(hair_tail = parse_factor(hair_tail, levels=c('N','Y'))) %>%
+	mutate(hair_tail = fct_collapse(hair_tail, No = 'N', Yes='Y')) %>%
+	mutate(hair_hornbud = parse_factor(hair_hornbud, levels=c('N','Y'))) %>%
+	mutate(hair_hornbud = fct_collapse(hair_hornbud, No = 'N', Yes='Y'))
+
+# Convert the tactile hair variables into factors:
+fetuses <- fetuses %>%
+	mutate(tactile_muzzle = parse_factor(tactile_muzzle, levels=c('Visible','Not visible','Hairsack'))) %>%
+	mutate(tactile_eyebrow = parse_factor(tactile_eyebrow, levels=c('Visible','Not visible','Hairsack'))) %>%
+	mutate(tactile_eyelash = parse_factor(tactile_eyelash, levels=c('Visible','Not visible','Hairsack')))
+
+# Convert the remaining 4 variables into factors:
+fetuses <- fetuses %>%
+	mutate(eye_op_close = parse_factor(eye_op_close, levels=c('Closed','Open'))) %>%
+	mutate(papillae_tongue = parse_factor(papillae_tongue, 
+		levels=c('None','Furthest back','Large front','Whole tongue'))) %>%
+	mutate(sex = parse_factor(sex, levels=c('Female','Male','Non Diff'))) %>%
+	mutate(eyelid = parse_factor(eyelid, levels=c('N','Y'))) %>%
+	mutate(eyelid = fct_collapse(eyelid, No = 'N', Yes='Y'))
+
+fetuses <- fetuses %>%
+	select(ID, sex, starts_with('parity'), starts_with('age'), weight_kg, crl_cm, crl_mm, starts_with('head'), everything())
+
+fetuses_target <- fetuses
+```
+
+Take the R code given in this tutorial and use it to create a complete R script to read and format all of the variables in the data frame.  You should end up with a data frame called 'fetuses' that looks exactly like this:
+
+```{r}
+fetuses %>%
+	str()
+
+fetuses %>%
+	summary()
+```
+
+A complete solution is given in appendix D - look at this if you get stuck.
+
+
+--- 
+
+## Appendix C:  R Markdown environment
+
+---
+
+You can ignore this section - it is just for reference so that we can see the exact version of R and the tidyverse package that was used to automatically create the results shown here.
+
+```{r}
+sessionInfo()
+```
+
+--- 
+
