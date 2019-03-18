@@ -21,6 +21,26 @@ options(width = 100)
 
 ---
 
+To include:
+
+-  mutate_if and mutate_all with predicates
+
+-  group_by and summarise
+
+-  joining
+
+-  customising plots - scale_colour_manual, date_format, ylim, colour wheel
+
+-  cowplot for publishing
+
+-  legend titles and position
+
+-  lty pch colours
+
+
+Check PDF for over-running of code lines
+
+
 R has existed for over 25 years, and is itself based on software that was invented in 1976.  Over that time, many different styles of R coding have evolved, and consequently there are a large number of different ways of accomplishing the same tasks.  The most modern way of using R is within the tidyverse (http://tidyverse.org) - this is a collection of extensions to base R that are focussed on making it as easy as possible to do data science in R: i.e. import, process and analyse the types of datasets that are typical to epidemiology.  Central to this are three key concepts:
 
 1) Tidy datasets are much easier to work with than messy datasets
