@@ -2,9 +2,9 @@
 title: "Importing and Cleaning Data in the R tidyverse"
 output:
  word_document: default
- pdf_document: default
  html_document:
   keep_md: yes
+ pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -13,9 +13,10 @@ output:
 # To create .R file:
 # knitr::purl('tidyverse_fetuses.Rmd', documentation=2)
 
-knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60),  # For code
-                      width = 60)  # For output
-options(cli.width = 60)  # For tidyverse loading messages
+#knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60),  # For code
+#                      width = 60)  # For output
+options(cli.width = 80)  # For tidyverse loading messages
+options(crayon.enabled = FALSE)  # To avoid non-UTF8 characters
 ```
 
 ---
@@ -278,10 +279,9 @@ fetuses <- fetuses_full %>%
 
 You can see now why it is a good idea to put each function on a new line - otherwise the code would quickly get hard to read!  As long as the %>% operator comes at the end of the line (rather than at the start of the new line), then it all works as expected.  Remember that all the code within the chain (even if on multiple lines) is a single R command, so it will not work if you try to just run the last line (for example).  Fortunately, RStudio is smart enough to know this and will run the entire command if the curser is anywhere on any of the lines within the whole chain of functions.
 
-An important feature of these code chains is that they are run in sequence from top to bottom.  Therefore, if we both create a variable and do something with this same variable within a chain, then we have to make sure that the function that creates the variable appears before any functions using this variable.  For example, if you try to run the following code then you will get an error because ID is selected before it is created:
+An important feature of these code chains is that they are run in sequence from top to bottom.  Therefore, if we both create a variable and do something with this same variable within a chain, then we have to make sure that the function that creates the variable appears before any functions using this variable.  For example, the following code gives an error because ID is selected before it is created:
 
-```{r, eval=FALSE}
-# You will get an error if you try to run this:
+```{r, error=TRUE}
 fetuses <- fetuses_full %>%
 	select(ID, parity, age_days, hair_coronary_band) %>%
 	mutate(ID = row_number()) %>%
@@ -787,7 +787,7 @@ ggplot(fetuses_full, aes(x=hair_coronary_band, fill=hair_tail)) +
 	geom_bar()
 ```
 
-We will do more with plots later in the course, but if you want to read more about ggplot now then see the Data visualisation chapter of the R for Data Science book (https://r4ds.had.co.nz/data-visualisation.html).  There is also a cookbook for common plot recipes using ggplot at:  http://www.cookbook-r.com/Graphs/  
+We will do more with plots later in the course, but if you want to read more about ggplot now then see the Data visualisation chapter of the R for Data Science book (https://r4ds.had.co.nz/data-visualisation.html).  There is also a cookbook for common plot recipes using ggplot at:  http://www.cookbook-r.com/Graphs/  Another good R package to know about is cowplot, which makes it easier to produce publication-ready plots from R:  https://cran.r-project.org/web/packages/cowplot/vignettes/introduction.html
 
 ---
 

@@ -3,8 +3,8 @@ title: "Importing and Cleaning Data in the R tidyverse"
 output:
  html_document:
   keep_md: yes
- word_document: default
  pdf_document: default
+ word_document: default
 ---
 
 
@@ -91,7 +91,7 @@ library('tidyverse')
 ```
 
 ```
-## ── Attaching packages ─────────────────── tidyverse 1.3.0 ──
+## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──
 ```
 
 ```
@@ -102,7 +102,7 @@ library('tidyverse')
 ```
 
 ```
-## ── Conflicts ────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 ```
@@ -453,15 +453,19 @@ fetuses <- fetuses_full %>%
 
 You can see now why it is a good idea to put each function on a new line - otherwise the code would quickly get hard to read!  As long as the %>% operator comes at the end of the line (rather than at the start of the new line), then it all works as expected.  Remember that all the code within the chain (even if on multiple lines) is a single R command, so it will not work if you try to just run the last line (for example).  Fortunately, RStudio is smart enough to know this and will run the entire command if the curser is anywhere on any of the lines within the whole chain of functions.
 
-An important feature of these code chains is that they are run in sequence from top to bottom.  Therefore, if we both create a variable and do something with this same variable within a chain, then we have to make sure that the function that creates the variable appears before any functions using this variable.  For example, if you try to run the following code then you will get an error because ID is selected before it is created:
+An important feature of these code chains is that they are run in sequence from top to bottom.  Therefore, if we both create a variable and do something with this same variable within a chain, then we have to make sure that the function that creates the variable appears before any functions using this variable.  For example, the following code gives an error because ID is selected before it is created:
 
 
 ```r
-# You will get an error if you try to run this:
 fetuses <- fetuses_full %>%
 	select(ID, parity, age_days, hair_coronary_band) %>%
 	mutate(ID = row_number()) %>%
 	filter(age_days >= 50)
+```
+
+```
+## Error: Can't subset columns that don't exist.
+## x The column `ID` doesn't exist.
 ```
 
 Notice that the select function gives us variables in the order that we asked for them.  Therefore, we can also use it to re-order the columns of a data frame by typing all of the variable names but in a different sequence:
@@ -1557,7 +1561,7 @@ ggplot(fetuses_full, aes(x=hair_coronary_band, fill=hair_tail)) +
 
 ![](tidyverse_fetuses_files/figure-html/unnamed-chunk-68-1.png)<!-- -->
 
-We will do more with plots later in the course, but if you want to read more about ggplot now then see the Data visualisation chapter of the R for Data Science book (https://r4ds.had.co.nz/data-visualisation.html).  There is also a cookbook for common plot recipes using ggplot at:  http://www.cookbook-r.com/Graphs/  
+We will do more with plots later in the course, but if you want to read more about ggplot now then see the Data visualisation chapter of the R for Data Science book (https://r4ds.had.co.nz/data-visualisation.html).  There is also a cookbook for common plot recipes using ggplot at:  http://www.cookbook-r.com/Graphs/  Another good R package to know about is cowplot, which makes it easier to produce publication-ready plots from R:  https://cran.r-project.org/web/packages/cowplot/vignettes/introduction.html
 
 ---
 
@@ -1851,7 +1855,7 @@ sessionInfo()
 ## [13] withr_2.1.2      glue_1.3.1       DBI_1.1.0        dbplyr_1.4.2    
 ## [17] modelr_0.1.5     lifecycle_0.1.0  munsell_0.5.0    gtable_0.3.0    
 ## [21] cellranger_1.1.0 rvest_0.3.5      evaluate_0.14    labeling_0.3    
-## [25] knitr_1.27       fansi_0.4.1      broom_0.5.4      Rcpp_1.0.3      
+## [25] knitr_1.27.2     fansi_0.4.1      broom_0.5.4      Rcpp_1.0.3      
 ## [29] scales_1.1.0     backports_1.1.5  jsonlite_1.6     farver_2.0.3    
 ## [33] fs_1.3.1         hms_0.5.3        digest_0.6.23    stringi_1.4.5   
 ## [37] grid_3.6.2       cli_2.0.1        tools_3.6.2      magrittr_1.5    
