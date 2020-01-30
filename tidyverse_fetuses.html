@@ -636,13 +636,12 @@ fetuses %&gt;%
     select(ID, parity, age_days, hair_coronary_band) %&gt;%
     filter(age_days &gt;= 50)</code></pre>
 <p>You can see now why it is a good idea to put each function on a new line - otherwise the code would quickly get hard to read! As long as the %&gt;% operator comes at the end of the line (rather than at the start of the new line), then it all works as expected. Remember that all the code within the chain (even if on multiple lines) is a single R command, so it will not work if you try to just run the last line (for example). Fortunately, RStudio is smart enough to know this and will run the entire command if the curser is anywhere on any of the lines within the whole chain of functions.</p>
-<p>An important feature of these code chains is that they are run in sequence from top to bottom. Therefore, if we both create a variable and do something with this same variable within a chain, then we have to make sure that the function that creates the variable appears before any functions using this variable. For example, the following code will not work because ID is selected before it is created:</p>
-<pre class="r"><code>fetuses &lt;- fetuses_full %&gt;%
+<p>An important feature of these code chains is that they are run in sequence from top to bottom. Therefore, if we both create a variable and do something with this same variable within a chain, then we have to make sure that the function that creates the variable appears before any functions using this variable. For example, if you try to run the following code then you will get an error because ID is selected before it is created:</p>
+<pre class="r"><code># You will get an error if you try to run this:
+fetuses &lt;- fetuses_full %&gt;%
     select(ID, parity, age_days, hair_coronary_band) %&gt;%
     mutate(ID = row_number()) %&gt;%
     filter(age_days &gt;= 50)</code></pre>
-<pre><code>## Error: Can&#39;t subset columns that don&#39;t exist.
-## [31mx[39m The column `ID` doesn&#39;t exist.</code></pre>
 <p>Notice that the select function gives us variables in the order that we asked for them. Therefore, we can also use it to re-order the columns of a data frame by typing all of the variable names but in a different sequence:</p>
 <pre class="r"><code>fetuses %&gt;%
     str()</code></pre>
