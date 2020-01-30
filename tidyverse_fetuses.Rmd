@@ -1,18 +1,21 @@
 ---
 title: "Importing and Cleaning Data in the R tidyverse"
 output:
- html_document:
-  keep_md: yes
  pdf_document: default
  word_document: default
+ html_document:
+  keep_md: yes
 ---
 
 ```{r setup, include=FALSE}
 # Seems to break purl for some reason:
 # knitr::opts_chunk$set(echo = TRUE)
-options(width = 100)
 # To create .R file:
 # knitr::purl('tidyverse_fetuses.Rmd', documentation=2)
+
+knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60),  # For code
+                      width = 60)  # For output
+options(cli.width = 60)  # For tidyverse loading messages
 ```
 
 ---
@@ -351,7 +354,8 @@ There are now 3 factor levels in hair_coronary_band_fct:  Y, N and n.  Note that
 ```{r}
 fetuses <- fetuses %>%
 	mutate(hair_coronary_band_fct = parse_factor(hair_coronary_band)) %>%
-	mutate(hair_coronary_band_fct = fct_collapse(hair_coronary_band_fct, No = c('N', 'n'), Yes='Y'))
+	mutate(hair_coronary_band_fct = fct_collapse(hair_coronary_band_fct, 
+	                                         No = c('N', 'n'), Yes='Y'))
 
 fetuses %>%
 	summary()
@@ -381,8 +385,10 @@ This is good because R has automatically alerted us to a problem that we need to
 
 ```{r}
 fetuses <- fetuses %>%
-	mutate(hair_coronary_band_fct = parse_factor(hair_coronary_band, levels=c('N','n','Y'))) %>%
-	mutate(hair_coronary_band_fct = fct_collapse(hair_coronary_band_fct, No = c('N', 'n'), Yes='Y'))
+	mutate(hair_coronary_band_fct = 
+	         parse_factor(hair_coronary_band, levels=c('N','n','Y'))) %>%
+	mutate(hair_coronary_band_fct = 
+	         fct_collapse(hair_coronary_band_fct, No = c('N', 'n'), Yes='Y'))
 ```
 
 This tells R to expect the 'n' entry, but then immediately re-codes it afterwards - this approach will fix known problems in the data, but still automatically alert us to any new problems that might occur if e.g. we update the data to include more observations (and different mistakes!).  
@@ -413,7 +419,8 @@ Having this distinction can sometimes be useful, but if we want to remove the NA
 
 ```{r}
 fetuses <- fetuses %>%
-	mutate(hair_coronary_band_fct = parse_factor(hair_coronary_band, levels=c('N','Y'), include_na = FALSE))
+	mutate(hair_coronary_band_fct = 
+	         parse_factor(hair_coronary_band, levels=c('N','Y'), include_na = FALSE))
 
 fetuses %>%
 	summary()
@@ -423,8 +430,10 @@ Now there is no distinction between the blank entry and the entry that was origi
 
 ```{r}
 fetuses <- fetuses %>%
-	mutate(hair_coronary_band = parse_factor(hair_coronary_band, levels=c('N','n','Y'))) %>%
-	mutate(hair_coronary_band = fct_collapse(hair_coronary_band, NULL = 'NA', No = c('N', 'n'), Yes='Y'))
+	mutate(hair_coronary_band = 
+	         parse_factor(hair_coronary_band, levels=c('N','n','Y'))) %>%
+	mutate(hair_coronary_band = 
+	         fct_collapse(hair_coronary_band, NULL = 'NA', No = c('N', 'n'), Yes='Y'))
 
 fetuses %>%
 	summary()
@@ -525,7 +534,8 @@ Turning **continous numbers into factors** uses a slightly different method with
 
 ```{r}
 fetuses <- fetuses %>%
-	mutate(age_group = cut(age_days, breaks=c(0, 100, 200, 300), labels=c('Early', 'Middle', 'Late')))
+	mutate(age_group = 
+	     cut(age_days, breaks=c(0, 100, 200, 300), labels=c('Early', 'Middle', 'Late')))
 
 fetuses %>%
 	summary()
@@ -545,7 +555,8 @@ We can also use the cut function with discrete numbers, although we have to be e
 
 ```{r}
 fetuses <- fetuses %>%
-	mutate(parity_fct_cut = cut(parity, breaks=c(0.5, 1.5, 2.5, 10.5), labels=c('First','Second','Older')))
+	mutate(parity_fct_cut = cut(parity, breaks=c(0.5, 1.5, 2.5, 10.5), 
+	                            labels=c('First','Second','Older')))
 
 fetuses %>%
 	summary()
@@ -724,7 +735,32 @@ ggplot(fetuses_full, aes(x=head_width_mm, y=head_length_mm)) +
 	stat_smooth()
 ```
 
-There are two types of plots that are particularly useful for summarising data: histograms and box plots.  We can create these using similar code:
+These graphs look OK electronically but the grey background is not ideal for printing (or for use in publication).  To change the default theme to a simpler black and white colour scheme use the following:
+
+```{r}
+theme_set(theme_bw())
+```
+
+All future plots within this R session will now use this colour scheme.  Note that you can also save plots to file, for example as PDF or TIFF format, using the ggsave function:
+
+```{r message=FALSE, warning=FALSE}
+ggplot(fetuses_full, aes(x=head_width_mm, y=head_length_mm)) +
+	geom_point() +
+	stat_smooth()
+ggsave('headlengthvswidth.pdf')
+ggsave('headlengthvswidth.tiff')
+```
+
+To see additional options for e.g. the height and width of these plots, see the help file for ggsave by typing:
+
+```{r, eval=FALSE}
+?ggsave
+```
+
+
+### Summary plots
+
+There are two types of plots that are particularly useful for summarising data: histograms and box plots.  We can create these using similar code to the basic plot above:
 
 ```{r}
 ggplot(fetuses_full, aes(x=head_width_mm)) +
@@ -823,7 +859,10 @@ plotdata <- fetuses_full %>%
 	select(ID, age_days, crl_cm, head_width_mm, head_length_mm, weight_kg) %>% 
 	gather(Measurement, Length, -ID, -age_days) %>%
 	mutate(Measurement = parse_factor(Measurement)) %>%
-	mutate(Measurement = fct_collapse(Measurement, "CRL (cm)"="crl_cm", "Head Width (mm)"="head_width_mm", "Head Length (mm)"="head_length_mm", "Weight (kg)"="weight_kg"))
+	mutate(Measurement = 
+	   fct_collapse(Measurement, "CRL (cm)"="crl_cm", 
+	     "Head Width (mm)"="head_width_mm", "Head Length (mm)"="head_length_mm",
+	     "Weight (kg)"="weight_kg"))
 
 ggplot(plotdata, aes(x=age_days, y=Length, col=Measurement)) +
 	geom_point() +
@@ -1054,9 +1093,12 @@ Convert the tactile hair variables into factors:
 
 ```{r}
 fetuses <- fetuses %>%
-	mutate(tactile_muzzle = parse_factor(tactile_muzzle, levels=c('Visible','Not visible','Hairsack'))) %>%
-	mutate(tactile_eyebrow = parse_factor(tactile_eyebrow, levels=c('Visible','Not visible','Hairsack'))) %>%
-	mutate(tactile_eyelash = parse_factor(tactile_eyelash, levels=c('Visible','Not visible','Hairsack')))
+	mutate(tactile_muzzle = parse_factor(tactile_muzzle, 
+	                     levels=c('Visible','Not visible','Hairsack'))) %>%
+	mutate(tactile_eyebrow = parse_factor(tactile_eyebrow,
+	                     levels=c('Visible','Not visible','Hairsack'))) %>%
+	mutate(tactile_eyelash = parse_factor(tactile_eyelash, 
+	                     levels=c('Visible','Not visible','Hairsack')))
 ```
 
 Convert the remaining 4 variables into factors:
@@ -1085,7 +1127,8 @@ We can also re-order the data frame to keep important variables first, and relat
 
 ```{r}
 fetuses <- fetuses %>%
-	select(ID, sex, starts_with('parity'), starts_with('age'), weight_kg, crl_cm, crl_mm, starts_with('head'), everything())
+	select(ID, sex, starts_with('parity'), starts_with('age'), 
+	       weight_kg, crl_cm, crl_mm, starts_with('head'), everything())
 ```
 
 Check the new order:	

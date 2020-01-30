@@ -1,20 +1,5 @@
 #' ---
-#' title: "Importing and Cleaning Data in the R tidyverse"
-#' output:
-#'  html_document:
-#'   keep_md: yes
-#'  pdf_document: default
-#'  word_document: default
-#' ---
-#' 
-## ----setup, include=FALSE------------------------------------------------
-# Seems to break purl for some reason:
-# knitr::opts_chunk$set(echo = TRUE)
-options(width = 100)
-# To create .R file:
-# knitr::purl('tidyverse_fetuses.Rmd', documentation=2)
-
-#' 
+#' "Importing and Cleaning Data in the R tidyverse"
 #' ---
 #' 
 #' ##### Matt Denwood, University of Copenhagen
@@ -35,7 +20,7 @@ options(width = 100)
 #' 
 #' For this tutorial we will assume that you have installed both the latest version of R (http://cran.r-project.org) and the latest version of RStudio (http://rstudio.org), but you do not need to have any prior experience with R.  Start by opening RStudio and creating a new R script by clicking 'File' then 'New File' then 'R Script'.  You should see a blank text file appear in the text file window in the top-left corner of R studio.  Save it (click on File, then Save) and name it 'tidy_fetuses.R' (make sure that you save this file in the same folder as the 'calf_fetuses.xlsx' data file that you have downloaded from Absalon). The RStudio window also contains three other windows: the R console (bottom left), Environment/History/Connections window (top right), and the Files/Plots/Packages/Help/Viewer window (bottom right).  You can copy code given here in 'R code chunks' like this one:
 #' 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 ## 2+4
 
 #' 
@@ -43,7 +28,7 @@ options(width = 100)
 #' 
 #' This document also displays the result of running these code chunks, which should match what you see when you run the code in R.  For example, the code above should give the following output in the R console window directly below the command:
 #' 
-## ---- echo=FALSE---------------------------------------------------------
+## ---- echo=FALSE--------------------------------------------------------------
 2+4
 
 #' 
@@ -51,14 +36,14 @@ options(width = 100)
 #' 
 #' It is a good idea to write comments for yourself in the R script file to remind you what the R code is doing when you come to look at it later, and it is crucial if you are going to share the code with anyone else.  Any lines starting with # are ignored by R, for example:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # This is a comment - it will be ignored by R
 1+4
 
 #' 
 #' It can also be useful to 'comment out' R code that you don't want to run but do want to leave in the R script for later reference: for example the 8+9 calculation in the code chunk below is ignored by R because that line starts with a #: 
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # 8+9
 
 #' 
@@ -74,7 +59,7 @@ options(width = 100)
 #' 
 #' You need to have the tidyverse package installed within R.  If you have not already installed the package (or have recently re-installed R), then click the 'Tools' menu then 'Install Packages' then type 'tidyverse' and click on 'Install'.  If you prefer, you can also paste the following command into your R script:
 #' 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 ## install.packages('tidyverse')
 
 #' 
@@ -82,7 +67,7 @@ options(width = 100)
 #' 
 #' You only need to install a package once, but you need to load it every time you restart R.  Do this using the library() function:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 library('tidyverse')
 
 #' 
@@ -104,7 +89,7 @@ library('tidyverse')
 #' 
 #' The first thing you are going to want to do is to read your data file.  This can be in a number of formats, but the most common is an Excel file.  For this we need to load the readxl package (this is installed as part of tidyverse, but not loaded by default):
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 library('readxl')
 
 #' 
@@ -112,7 +97,7 @@ library('readxl')
 #' 
 #' You should now be able to load the data from a specified sheet within the Excel file using:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- read_excel('calf_fetuses.xlsx', sheet='calf_fetuses')
 
 #' 
@@ -126,13 +111,13 @@ fetuses <- read_excel('calf_fetuses.xlsx', sheet='calf_fetuses')
 #' 
 #' The tidyverse revolves around data frames - these allow us to keep all related data together, in a consistent format where we know that all columns have the same number of rows and each row corresponds to a specific set of observations.  When working with data in the tidyverse, we will therefore nearly always be working within these data frames.  To do something within a data frame, we first type the name of the data frame, then the special 'pipe' or 'chaining' operator %>%, and then a function that we want to apply to the data frame.  For example:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses %>% nrow()
 
 #' 
 #' This takes the data frame fetuses, and applies the function nrow() to the data - the output is the number of rows of the dataset.  In base R we would achieve the same thing using:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 nrow(fetuses)
 
 #' 
@@ -140,7 +125,7 @@ nrow(fetuses)
 #' 
 #' A useful function to find out even more about the structure of the data is str() - this tells us how R is storing each of the columns (called 'variables') within the data frame:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses %>% str()
 
 #' 
@@ -162,7 +147,7 @@ fetuses %>% str()
 #' 
 #' Another way of looking at the data is by typing the name of the data frame:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses
 
 #' 
@@ -170,7 +155,7 @@ fetuses
 #' 
 #' Finally, we can use the summary() function to see summary statistics for each variable:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses %>% summary()
 
 #' 
@@ -197,7 +182,7 @@ fetuses %>% summary()
 #' 
 #' There is a very useful function called mutate() that allows us to create a new variable based on one or more existing variables within a data frame.  For example, the following code creates a new numeric variable called crl_mm based on the existing numeric variable crl_cm:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses %>%
 	mutate(crl_mm = crl_cm*10)
 
@@ -212,14 +197,14 @@ fetuses %>%
 #' 
 #' To get R to remember the changes we are making to the data frame we need to assign it to something using the assignment operator.  For example, this code creates a new data frame called fetuses_full:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses_full <- fetuses %>%
 	mutate(crl_mm = crl_cm*10)
 
 #' 
 #' You should now see a new data frame called fetuses_full appear in your R environment as '262 obs. of 19 variables'.  Rather than creating new data frames every time we add a new variable, we might want to over-write the existing data frame instead. In this case, we can just assign the new data frame to have the same name as the old one:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
 	mutate(crl_mm = crl_cm*10)
 
@@ -235,21 +220,21 @@ fetuses %>%
 #' 
 #' Sometimes we might be reading in a large Excel dataset (with many columns and/or rows), but we do not want to work with the whole dataset.  For example, let's say we are only interested in the parity, age and hair_coronary_band variables in the fetuses data frame.  Rather than working on the large dataset, it might be a good idea to create a second data frame with a more restricted dataset - this will be easier (and faster) to work with, but does not remove any information from the original dataset that we have already copied to fetuses_full.  We can select columns from fetuses (and over-write this data frame) using the select() function:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
 	select(parity, age_days, hair_coronary_band)
 
 #' 
 #' You should now see that fetuses is 262 obs. or 3 variables (but fetuses_full is still 19 variables so we still have the original data).  This makes it easier to look only at what we want:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses %>%
 	summary()
 
 #' 
 #' We might even go further, and want to exclude the very early fetuses from the dataset we are working with.  The filter() function extracts only rows that meet one or more conditions, e.g.:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
 	filter(age_days >= 50)
 
@@ -258,7 +243,7 @@ fetuses <- fetuses %>%
 #' 
 #' The great thing about the chaining operator is that it is easy to do multiple functions in a row without stopping in between, for example the two bits of R code above is the same as the following single piece of R code:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses_full %>%
 	select(parity, age_days, hair_coronary_band) %>%
 	filter(age_days >= 50)
@@ -266,7 +251,7 @@ fetuses <- fetuses_full %>%
 #' 
 #' Note that we can add as many functions to the chain as we want to, as long as we remember to put %>% at the end of every function (except the last function - this terminates the chain).  Let's add another function near the top of this chain using mutate to create a new variable that tells us the row number from the original data that each row in the filtered data corresponds to (just in case we need it later):
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses_full %>%
 	mutate(ID = row_number()) %>%
 	select(ID, parity, age_days, hair_coronary_band) %>%
@@ -277,7 +262,7 @@ fetuses <- fetuses_full %>%
 #' 
 #' An important feature of these code chains is that they are run in sequence from top to bottom.  Therefore, if we both create a variable and do something with this same variable within a chain, then we have to make sure that the function that creates the variable appears before any functions using this variable.  For example, the following code will not work because ID is selected before it is created:
 #' 
-## ---- error=TRUE---------------------------------------------------------
+## ---- error=TRUE--------------------------------------------------------------
 fetuses <- fetuses_full %>%
 	select(ID, parity, age_days, hair_coronary_band) %>%
 	mutate(ID = row_number()) %>%
@@ -286,7 +271,7 @@ fetuses <- fetuses_full %>%
 #' 
 #' Notice that the select function gives us variables in the order that we asked for them.  Therefore, we can also use it to re-order the columns of a data frame by typing all of the variable names but in a different sequence:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses %>%
 	str()
 
@@ -297,7 +282,7 @@ fetuses %>%
 #' 
 #' We can also use one or more 'select helper' functions to select groups of variables rather than typing out the variable names individually.  The most useful of these are  starts_with(), contains(), and everything() - for example the following code selects ID first, then anything starting with 'crl', then anything containing 'eye', then everything else:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses_full %>%
 	mutate(ID = row_number()) %>%
 	select(ID, starts_with('crl'), contains('eye'), everything()) %>%
@@ -312,33 +297,33 @@ fetuses_full %>%
 #' 
 #' When reading Excel files, R will usually store numbers (and date/time variables) into the correct format automatically (unless these columns include some cells with text entries in Excel).  But it has no way of reliably formatting our categorical data automatically, so we need to manually convert them into factor variables using 'parse_factor' within a mutate function to convert a character/text variable to a factor.  For example:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
 	mutate(hair_coronary_band_fct = parse_factor(hair_coronary_band))
 
 #' 
 #' This creates a new variable by turning the text variable hair_coronary_band into a factor.  We can now summarise this more usefully than we could with the text variable:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses %>%
 	summary()
 
 #' 
 #' Now we get the number of Y and the number of N for hair_coronary_band_fct.  In this case, that works OK - but what would happen if the data had been entered inconsistently, for example if 'n' had sometimes been used instead of 'N'?  Let's deliberately introduce an error (don't worry about the code itself - you won't do this in real life!):
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses$hair_coronary_band[1] <- 'n'
 
 #' 
 #' We can see the first observation in hair_coronary_band is now 'n':
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses %>% str()
 
 #' 
 #' What happens when this is automatically turned into a factor?
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
 	mutate(hair_coronary_band_fct = parse_factor(hair_coronary_band))
 
@@ -348,10 +333,11 @@ fetuses %>%
 #' 
 #' There are now 3 factor levels in hair_coronary_band_fct:  Y, N and n.  Note that N and n are different, but we don't really want them to be!  We can deal with this by first creating the factor as before, and chaining the data frame into a second mutate where we use fct_collapse to manually recode the factor levels so that Y becomes Yes and both n and N become No, like so:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
 	mutate(hair_coronary_band_fct = parse_factor(hair_coronary_band)) %>%
-	mutate(hair_coronary_band_fct = fct_collapse(hair_coronary_band_fct, No = c('N', 'n'), Yes='Y'))
+	mutate(hair_coronary_band_fct = fct_collapse(hair_coronary_band_fct, 
+	                                         No = c('N', 'n'), Yes='Y'))
 
 fetuses %>%
 	summary()
@@ -365,31 +351,33 @@ fetuses %>%
 #' 
 #' In the real world, we do not want to spend time examining all of the factors to make sure that there aren't any typos - particularly when we think the data should be correct to start with!  This can lead to errors, because we might not check as carefully as we should and therefore miss problems with the data.  So it is much better practice to tell parse_factor what to expect by using the levels argument:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
 	mutate(hair_coronary_band_fct = parse_factor(hair_coronary_band, levels=c('N','Y')))
 
 #' 
 #' When we run this code, we get a warning to tell us that an unexpected text entry 'n' was observed in row 1, and the resulting variable now has 1 missing value (NA):
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses %>%
 	summary()
 
 #' 
 #' This is good because R has automatically alerted us to a problem that we need to fix.  So we can go back and adjust our code so it looks like this:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
-	mutate(hair_coronary_band_fct = parse_factor(hair_coronary_band, levels=c('N','n','Y'))) %>%
-	mutate(hair_coronary_band_fct = fct_collapse(hair_coronary_band_fct, No = c('N', 'n'), Yes='Y'))
+	mutate(hair_coronary_band_fct = 
+	         parse_factor(hair_coronary_band, levels=c('N','n','Y'))) %>%
+	mutate(hair_coronary_band_fct = 
+	         fct_collapse(hair_coronary_band_fct, No = c('N', 'n'), Yes='Y'))
 
 #' 
 #' This tells R to expect the 'n' entry, but then immediately re-codes it afterwards - this approach will fix known problems in the data, but still automatically alert us to any new problems that might occur if e.g. we update the data to include more observations (and different mistakes!).  
 #' 
 #' There is one additional thing to remember with parse_factor: if there were observations in the original data that were missing before making them into a factor, then these will be treated differently to observations that were present but corresponded to unknown factor levels.  For example, let's deliberately make the second observation of hair_coronary_band blank (i.e. missing) and then re-run the code with only N and Y as specified levels:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses$hair_coronary_band[2] <- ''
 
 fetuses <- fetuses %>%
@@ -398,22 +386,23 @@ fetuses <- fetuses %>%
 #' 
 #' We get the red text again (telling us about the 'n' on row 1), but no mention of the missing entry on row 2.  This is because parse_factor has created an explicit factor level for missing data:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses %>%
 	summary()
 
 #' 
 #' We have both the factor level NA (the value that was missing to start with) and NA's (the value of 'n' that became missing because it wasn't included in the allowed levels).  But this subtle distinction is not visible in the data itself:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses
 
 #' 
 #' Having this distinction can sometimes be useful, but if we want to remove the NA factor level then we can specify the include_na = FALSE argument e.g.:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
-	mutate(hair_coronary_band_fct = parse_factor(hair_coronary_band, levels=c('N','Y'), include_na = FALSE))
+	mutate(hair_coronary_band_fct = 
+	         parse_factor(hair_coronary_band, levels=c('N','Y'), include_na = FALSE))
 
 fetuses %>%
 	summary()
@@ -421,10 +410,12 @@ fetuses %>%
 #' 
 #' Now there is no distinction between the blank entry and the entry that was originally 'n' - they are both NA's.  Alternatively, you can remove the NA factor level (or any other factor level that you want to) by setting it to NULL within fct_collapse:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
-	mutate(hair_coronary_band = parse_factor(hair_coronary_band, levels=c('N','n','Y'))) %>%
-	mutate(hair_coronary_band = fct_collapse(hair_coronary_band, NULL = 'NA', No = c('N', 'n'), Yes='Y'))
+	mutate(hair_coronary_band = 
+	         parse_factor(hair_coronary_band, levels=c('N','n','Y'))) %>%
+	mutate(hair_coronary_band = 
+	         fct_collapse(hair_coronary_band, NULL = 'NA', No = c('N', 'n'), Yes='Y'))
 
 fetuses %>%
 	summary()
@@ -434,7 +425,7 @@ fetuses %>%
 #' 
 #' The only difference between the factors hair_coronary_band and hair_coronary_band_fct is that 'n' was made into 'No' in hair_coronary_band, but left as missing in hair_coronary_band_fct.  Other than for demonstration purposes we don't really need hair_coronary_band_fct, so it is best to remove it - we can do this using select and a minus symbol in front of the variable name to indicate it is to be removed rather than retained:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
 	select(-hair_coronary_band_fct)
 
@@ -456,7 +447,7 @@ fetuses %>%
 #' 
 #' For **discrete numbers**, we can use the parse_factor() function like before - but we first need to turn the integer into a character (text) variable.  It is also a good idea to add some text to the number so that the resulting factor is more easily distinguishable from a 'true number'. We can accomplish both tasks simultaneously using the str_c() function, for example:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses %>%
 	mutate(parity_text = str_c('Parity_', parity)) %>%
 	mutate(parity_fct = parse_factor(parity_text)) %>%
@@ -465,7 +456,7 @@ fetuses %>%
 #' 
 #' This has been broken down into stages so that you can see what is going on.  The first step uses str_c() to create a new character variable by sticking the text 'Parity_' before the parity number, and the second step creates a factor from the character variable as we did before.  The only problem with this is that we haven't specified levels to parse_factor(), so if we have any errors in the data (e.g. a negative number for parity) then we will not detect these.  A good trick is to automatically create a wide range of possible parity levels without having to type them all out:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 str_c('Parity_', seq(from=1, to=10, by=1))
 
 #' 
@@ -473,7 +464,7 @@ str_c('Parity_', seq(from=1, to=10, by=1))
 #' 
 #' We can then use our generated parity levels in the parse_factor function, and combine all steps of the code together:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
 	mutate(parity_fct = parse_factor(str_c('Parity_', parity), 
 		levels=str_c('Parity_', seq(from=1, to=10, by=1)))) %>%
@@ -488,7 +479,7 @@ fetuses %>%
 #' 
 #' Notice here that we specified a factor level that doesn't exist in the data - there are no Parity_10 cows (and therefore no Ancient cows).  In some situations this is helpful: we can include a possible factor level and R will explictly tell us that there are no observations within that category.  But if we want to remove the unused factor levels, we can do this using the fct_drop function:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
 	mutate(parity_fct = fct_drop(parity_fct), parity_group = fct_drop(parity_group))
 
@@ -500,7 +491,7 @@ fetuses %>%
 #' 
 #' There is a second discrete number that makes sense to convert into a factor:  our ID variable is currently stored as a number, but it makes more sense to think of it as a grouping variable i.e. a factor.  Sometimes this doesn't make any difference, but if we want to use ID either to merge datasets, or as a stratifying variable in a plot or in a model, then we might get the wrong result if ID is a number.  So we had better turn it into a factor:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
 	mutate(ID_simple = parse_factor(str_c('ID_', ID)))  %>%
 	mutate(ID = parse_factor(str_c('ID_', str_replace_all(format(ID),' ','0'))))
@@ -512,7 +503,7 @@ fetuses
 #' 
 #' --- 
 #' 
-## ----echo=FALSE----------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 # Another way to do it for our reference - but less obvious I think
 temp <- fetuses %>%
 	mutate(parity_fct = parse_factor(str_c(parity))) %>%
@@ -523,9 +514,10 @@ temp <- fetuses %>%
 #' 
 #' Turning **continous numbers into factors** uses a slightly different method with the cut() function rather than parse_string.  The cut function allows you to break a continuous variable into segments using specified breakpoints and corresponding labels for the factor levels.  For example we can turn the age into a factor to reflect an early, mid or late stage foetus:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
-	mutate(age_group = cut(age_days, breaks=c(0, 100, 200, 300), labels=c('Early', 'Middle', 'Late')))
+	mutate(age_group = 
+	     cut(age_days, breaks=c(0, 100, 200, 300), labels=c('Early', 'Middle', 'Late')))
 
 fetuses %>%
 	summary()
@@ -543,9 +535,10 @@ fetuses %>%
 #' 
 #' We can also use the cut function with discrete numbers, although we have to be even more careful about the rules for closed vs open intervals because it will happen more often (for example, an age of exactly 100 days is far less likely than a parity of exactly 3).  Alternatively, you can specify the breaks as being mid-way between the discrete values to make the code more obvious, for example:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
-	mutate(parity_fct_cut = cut(parity, breaks=c(0.5, 1.5, 2.5, 10.5), labels=c('First','Second','Older')))
+	mutate(parity_fct_cut = cut(parity, breaks=c(0.5, 1.5, 2.5, 10.5), 
+	                            labels=c('First','Second','Older')))
 
 fetuses %>%
 	summary()
@@ -563,13 +556,13 @@ fetuses %>%
 #' 
 #' Dates are a very specific type of variable that we can do special things with, such as calculating the number of days between two dates, and extracting parts of the date e.g. the year, day of the week, month name etc.  But in order to be able to do this, R must first store the variable as a date.  When reading an Excel file using read_excel this is usually done automatically, but sometimes we can end up with a text variable that contains text representing the date.  In this case, we can use the parse_date function if the date is written in the ISO standard format of YYYY-MM-DD:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 parse_date('2010-10-21')
 
 #' 
 #' If the date is written in a non-standard format (which is unfortunately more common than the standard format!), then you will need to tell R what format it is in.  The lubridate package has some helpful functions to do this, for example:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 library('lubridate')
 ymd('2010/10/21')
 make_date(year=2010, month=10, day=21)
@@ -579,7 +572,7 @@ mdy('10-21-2010')
 #' 
 #' A very common application of dates is to calculate a difference between two dates.  The best way to do this is to subtract one date from another, and then use the as.numeric function to convert the time difference into a simple number using the appropriate units.  For example:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 dt1 <- parse_date('2018-01-01')
 dt1
 dt2 <- parse_date('2018-02-03')
@@ -590,7 +583,7 @@ as.numeric(dt2 - dt1, units='weeks')
 #' 
 #' It is also possible to add or subtract a given number of days to a date in a similar way:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 dt1 + 33
 dt1 - 1
 
@@ -599,7 +592,7 @@ dt1 - 1
 #' 
 #' Dates are relatively simple to work with, but date/times have the additional complexity of time zones.  Unless you specifically need the time to be represented, you are much better off with simple dates.  Unfortunately, Excel will save dates as date/time objects so we end up with these when we import them to R.  For this reason, it is often a good idea to convert these to a simple date using the as.Date function, for example:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 dt <- as.POSIXct('2010-02-15 05:00')
 dt
 as.Date(dt)
@@ -611,7 +604,7 @@ as.Date(dt)
 #' 
 #' There is an important theoretical difference between ordinal data (where there is an order to the categories observed, e.g. body condition score) and categorical data (where there is no logical order, e.g. breed).  This distinction is less important in R, so we tend to use factors to represent both.  However, there is a specific type of factor that it is occasionally useful to use, called an ordered factor.  These are created using the same parse_factor and cut functions that we explored earlier, but with the additional argument: ordered=TRUE.  For example:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
 	mutate(parity_fct = parse_factor(str_c('Parity_', parity), 
 		levels=str_c('Parity_', seq(from=1, to=10, by=1)))) %>%
@@ -630,7 +623,7 @@ fetuses %>%
 #' 
 #' We can represent binary data as logical (FALSE/TRUE), and R has a special type called logical that can be used for this.  It is possible to use this type for e.g. results of diagnostic tests, where there is a logical FALSE/TRUE outcome.  However, the same thing can also be represented using a factor with two levels Negative/Positive, so for the sake of consistency it is generally a good idea to just stick to using factors.  To convert a logical variable into a factor variable, you can use the str_c function as we did for integer numbers:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 testresult <- c(FALSE, TRUE, NA)
 testresult
 str_c(testresult)
@@ -646,7 +639,7 @@ parse_factor(str_c(testresult), levels=c('FALSE','TRUE'))
 #' Sometimes we will want to read numbers from text, if for example there are non-numeric characters such as £ or € in the text.  We can use the parse_number function to do this:
 #' 
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 price <- "€103,401"
 parse_number(price)
 
@@ -654,7 +647,7 @@ parse_number(price)
 #' Notice that R is english-centric by default, so a danish-formatted number will be parsed incorrectly:
 #' 
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 danish_price <- "DKK 103.401,00"
 parse_number(danish_price)
 
@@ -662,7 +655,7 @@ parse_number(danish_price)
 #' We get DKK 103,40 rather than DKK 103.401 - but this can be overcome by setting the locale:
 #' 
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 danish_price <- "DKK 103.401,00"
 parse_number(danish_price, locale=locale(decimal_mark = ",", grouping_mark = "."))
 
@@ -673,14 +666,14 @@ parse_number(danish_price, locale=locale(decimal_mark = ",", grouping_mark = "."
 #' 
 #' Let's go back to the original dataset fetuses_full:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses_full %>%
 	summary()
 
 #' 
 #' We now know how to format each of these variables as either a factor or number one by one - for example:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses_full %>% 
 	mutate(hair_coronary_band = parse_factor(hair_coronary_band, levels=c('N','Y'))) %>%
 	mutate(hair_ear = parse_factor(hair_ear, levels=c('N','Y'))) %>% 
@@ -693,7 +686,7 @@ fetuses <- fetuses_full %>%
 #' 
 #' A good tip is to quickly change all character (text) variables into factors and then immediately use summary on the result: this allows us to see what different values the data contains for each of the text variables.  We can do this using mutate_if and the condition is_character:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses %>% 
 	mutate_if(is_character, parse_factor) %>%
 	summary()
@@ -711,22 +704,47 @@ fetuses %>%
 #' 
 #' We can get a lot of information using the summarise() variable, but sometimes it is better to visualise data graphically to check that the observations are consistent with what we expect.  There are several ways to make plots in R, but the tidyverse way is to use ggplot.  These plots all start with the same pattern - first we define the data frame we want to use, then we specify which variables should go on the x and y axes (as well as any variables that can be used to group by colour etc) using the aes() function, then we add the 'layers' that we want to the plot.  For example:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 ggplot(fetuses_full, aes(x=head_width_mm, y=head_length_mm)) +
 	geom_point()
 
 #' 
 #' The first line says that we want to use the fetuses_full dataset, and that we want head_width_mm on the x-axis and head_length_mm on the y-axis.  The first line doesn't tell R what type of plot we want, but it ends with a + symbol, which is a lot like the %>% operator in that it tells R that we have not completed the command.  The second line tells R that we want to add points to the plot, so we end up with a simple scatter-type plot.  We can also add a smoothed line of best fit as a second layer using:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 ggplot(fetuses_full, aes(x=head_width_mm, y=head_length_mm)) +
 	geom_point() +
 	stat_smooth()
 
 #' 
-#' There are two types of plots that are particularly useful for summarising data: histograms and box plots.  We can create these using similar code:
+#' These graphs look OK electronically but the grey background is not ideal for printing (or for use in publication).  To change the default theme to a simpler black and white colour scheme use the following:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
+theme_set(theme_bw())
+
+#' 
+#' All future plots within this R session will now use this colour scheme.  Note that you can also save plots to file, for example as PDF or TIFF format, using the ggsave function:
+#' 
+## ----message=FALSE, warning=FALSE---------------------------------------------
+ggplot(fetuses_full, aes(x=head_width_mm, y=head_length_mm)) +
+	geom_point() +
+	stat_smooth()
+ggsave('headlengthvswidth.pdf')
+ggsave('headlengthvswidth.tiff')
+
+#' 
+#' To see additional options for e.g. the height and width of these plots, see the help file for ggsave by typing:
+#' 
+## ---- eval=FALSE--------------------------------------------------------------
+## ?ggsave
+
+#' 
+#' 
+#' ### Summary plots
+#' 
+#' There are two types of plots that are particularly useful for summarising data: histograms and box plots.  We can create these using similar code to the basic plot above:
+#' 
+## -----------------------------------------------------------------------------
 ggplot(fetuses_full, aes(x=head_width_mm)) +
 	geom_histogram(binwidth=10)
 
@@ -738,14 +756,14 @@ ggplot(fetuses_full, aes(y=head_width_mm, x=hair_coronary_band)) +
 #' 
 #' We might also want to make a bar plot to check how categorical variables relate to each other.  For example:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 ggplot(fetuses_full, aes(x=hair_coronary_band)) +
 	geom_bar()
 
 #' 
 #' This tells us that most of the fetuses do not have hair on the corony band.  If we wanted to see how this related to another categorical variable, then we can create a stacked bar chart by using the fill argument to aes:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 ggplot(fetuses_full, aes(x=hair_coronary_band, fill=hair_tail)) +
 	geom_bar()
 
@@ -758,7 +776,7 @@ ggplot(fetuses_full, aes(x=hair_coronary_band, fill=hair_tail)) +
 #' 
 #' Sometimes we encounter datasets that are structured in a way that might be good for data entry, but is bad for data analysis.  For example, we might have repeated observations of the same variable over time within the same individual represented as multiple columns within the worksheet:  this 'wide format' is a common way to enter the data, but makes it difficult to summarise all the observations from the same individual using R.  For example we might have the following dataset (that I will create directly in R using the tribble() function just for illustration):
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 wide <- tribble(
         ~ID, ~Time1, ~Time2, ~Time3,
         'Ben', 78, 75, 73,
@@ -769,7 +787,7 @@ wide
 #' 
 #' Here we have 3 repeated observations of the same variable (body weight), at 3 different time points for 2 individuals.  Now let's say we want to plot these weights over time - how do we do that?  For data analysis we really want the data in 'long format', where we have a column for the ID of the individual, a column for the time point, and a single column for all of the observations.   So to create the plot, we first convert the data to long format using the gather() function:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 long <- wide %>%
 	gather(TimePoint, Weight, -ID) %>%
 	mutate(TimePoint = parse_factor(TimePoint)) %>%
@@ -779,7 +797,7 @@ long
 #' 
 #' The first 2 arguments of the gather function allows us to specify the new column name for the grouping variable, and the new column name for the observation variable.  The grouping variable values are determined by the corresponding previous column names (in this case Time1, Time2 and Time3), and the observation variable values (the observed weights) are the observed data gathered from all of the previous columns.  The remaining arguments indicate variables (with a minus in front of the name) that we want to exclude from the gather process: these variables (in our case just one variable: ID) will be added to the resulting long data in the same format, but with rows repeated as necessary.  We then use the parse_factor function to convert the new text variable TimePoint into a factor (along with ID). Notice that we do not bother to specify the levels for the new TimePoint variable: this is because the variable is taken directly from the old column names, so there is no risk of any data entry mistakes! The result is exactly the same data, but represented differently: the wide data has the 6 observations in 3 columns of 2 rows, and the long data has the same observations in a single variable with 6 rows.  Now we can make the plot we wanted:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 ggplot(long, aes(x=TimePoint, y=Weight, col=ID, group=ID)) +
 	geom_line() +
 	geom_point()
@@ -792,14 +810,14 @@ ggplot(long, aes(x=TimePoint, y=Weight, col=ID, group=ID)) +
 #' The gather function also comes in handy for making similar types of plots where we want to put different variables side-by-side.  For example, we might want to look at how the head_width_mm, head_length_mm and crl_cm variables change with age_days.  We can do that one at a time using the existing data frame, for example:
 #' 
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 ggplot(fetuses_full, aes(x=age_days, y=head_width_mm)) +
 	geom_point()
 
 #' 
 #' But how do we add head_length_mm and crl_cm to this plot?  We need to convert the data into long format, and then make the plot:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 plotdata <- fetuses_full %>% 
 	mutate(ID = row_number()) %>%
 	select(ID, age_days, crl_cm, head_width_mm, head_length_mm) %>% 
@@ -817,13 +835,16 @@ ggplot(plotdata, aes(x=age_days, y=Length, col=Measurement)) +
 #' What happens if we want to add weight to the plot?  All we have to do is copy and paste the code above, and add weight_kg in the relevant place:
 #' 
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 plotdata <- fetuses_full %>% 
 	mutate(ID = row_number()) %>%
 	select(ID, age_days, crl_cm, head_width_mm, head_length_mm, weight_kg) %>% 
 	gather(Measurement, Length, -ID, -age_days) %>%
 	mutate(Measurement = parse_factor(Measurement)) %>%
-	mutate(Measurement = fct_collapse(Measurement, "CRL (cm)"="crl_cm", "Head Width (mm)"="head_width_mm", "Head Length (mm)"="head_length_mm", "Weight (kg)"="weight_kg"))
+	mutate(Measurement = 
+	   fct_collapse(Measurement, "CRL (cm)"="crl_cm", 
+	     "Head Width (mm)"="head_width_mm", "Head Length (mm)"="head_length_mm",
+	     "Weight (kg)"="weight_kg"))
 
 ggplot(plotdata, aes(x=age_days, y=Length, col=Measurement)) +
 	geom_point() +
@@ -833,7 +854,7 @@ ggplot(plotdata, aes(x=age_days, y=Length, col=Measurement)) +
 #' 
 #' The only addition is that the x-axis label and names of the factor levels have been changed to a more readable format, and the y-axis label has been removed as weight isn't a length! But the weight is on a different scale to the other variables so is hard to see at the bottom of the graph.  There are two ways to improve this: we could change the units of weight so that 1 y-axis value represented 100g rather than 1kg, but it is probably a better idea to put the different variables into different facets using the facet_wrap() function:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 ggplot(plotdata, aes(x=age_days, y=Length)) +
 	geom_point() +
 	xlab('Age (days)') +
@@ -867,7 +888,7 @@ ggplot(plotdata, aes(x=age_days, y=Length)) +
 #' 
 #' ---
 #' 
-## ---- echo=FALSE---------------------------------------------------------
+## ---- echo=FALSE--------------------------------------------------------------
 
 library('tidyverse')
 library('readxl')
@@ -933,7 +954,7 @@ fetuses_target <- fetuses
 #' 
 #' Take the R code given in this tutorial and use it to create a complete R script to read and format all of the variables in the data frame.  You should end up with a data frame called 'fetuses' that looks exactly like this:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses %>%
 	str()
 
@@ -952,7 +973,7 @@ fetuses %>%
 #' 
 #' You can ignore this section - it is just for reference so that we can see the exact version of R and the tidyverse package that was used to automatically create the results shown here.
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 sessionInfo()
 
 #' 
@@ -966,7 +987,7 @@ sessionInfo()
 #' 
 #' ##### Step 1:  load the required packages
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 library('tidyverse')
 library('readxl')
 
@@ -976,7 +997,7 @@ library('readxl')
 #' Go to the Session menu, then Set Working Directory, then Choose Directory.¨
 #' 
 #' ##### Step 3:  read the data frame into R
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- read_excel('calf_fetuses.xlsx', sheet='calf_fetuses')
 
 #' 
@@ -984,7 +1005,7 @@ fetuses <- read_excel('calf_fetuses.xlsx', sheet='calf_fetuses')
 #' 
 #' Look at the structure to identify what needs to be formatted:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses %>%
 	str()
 
@@ -993,7 +1014,7 @@ fetuses %>%
 #' 
 #' We can also automatically convert the character variables to factors and summarise, just to see what we have in the data:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses %>%
 	mutate_if(is.character, parse_factor) %>%
 	summary()
@@ -1004,7 +1025,7 @@ fetuses %>%
 #' 
 #' Create a new ID variable and turn it into a factor:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
 	mutate(ID = row_number()) %>%
 	mutate(ID = parse_factor(str_c('ID_', str_replace_all(format(ID),' ','0'))))
@@ -1012,7 +1033,7 @@ fetuses <- fetuses %>%
 #' 
 #' Turn parity into a factor and create a grouped version:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
 	mutate(parity = parse_factor(str_c('Parity_', parity), 
 		levels=str_c('Parity_', seq(from=1, to=10, by=1)))) %>%
@@ -1025,7 +1046,7 @@ fetuses <- fetuses %>%
 #' 
 #' Create an age group variable as a factor and crl_mm as a number:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
 	mutate(age_group = cut(age_days, breaks=c(0, 100, 200, 300), 
 		labels=c('Early', 'Middle', 'Late'))) %>%
@@ -1036,7 +1057,7 @@ fetuses <- fetuses %>%
 #' 
 #' Convert all of the hair variables into factors one at a time:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
 	mutate(hair_coronary_band = parse_factor(hair_coronary_band, levels=c('N','Y'))) %>%
 	mutate(hair_coronary_band = fct_collapse(hair_coronary_band, No = 'N', Yes='Y')) %>%
@@ -1052,16 +1073,19 @@ fetuses <- fetuses %>%
 #' 
 #' Convert the tactile hair variables into factors:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
-	mutate(tactile_muzzle = parse_factor(tactile_muzzle, levels=c('Visible','Not visible','Hairsack'))) %>%
-	mutate(tactile_eyebrow = parse_factor(tactile_eyebrow, levels=c('Visible','Not visible','Hairsack'))) %>%
-	mutate(tactile_eyelash = parse_factor(tactile_eyelash, levels=c('Visible','Not visible','Hairsack')))
+	mutate(tactile_muzzle = parse_factor(tactile_muzzle, 
+	                     levels=c('Visible','Not visible','Hairsack'))) %>%
+	mutate(tactile_eyebrow = parse_factor(tactile_eyebrow,
+	                     levels=c('Visible','Not visible','Hairsack'))) %>%
+	mutate(tactile_eyelash = parse_factor(tactile_eyelash, 
+	                     levels=c('Visible','Not visible','Hairsack')))
 
 #' 
 #' Convert the remaining 4 variables into factors:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
 	mutate(eye_op_close = parse_factor(eye_op_close, levels=c('Closed','Open'))) %>%
 	mutate(papillae_tongue = parse_factor(papillae_tongue, 
@@ -1074,7 +1098,7 @@ fetuses <- fetuses %>%
 #' 
 #' ##### Step 6:  Re-examine the structure of the data frame:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses %>%
 	str()
 
@@ -1083,14 +1107,15 @@ fetuses %>%
 #' 
 #' We can also re-order the data frame to keep important variables first, and related variables together:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses <- fetuses %>%
-	select(ID, sex, starts_with('parity'), starts_with('age'), weight_kg, crl_cm, crl_mm, starts_with('head'), everything())
+	select(ID, sex, starts_with('parity'), starts_with('age'), 
+	       weight_kg, crl_cm, crl_mm, starts_with('head'), everything())
 
 #' 
 #' Check the new order:	
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses %>%
 	str()
 
@@ -1099,7 +1124,7 @@ fetuses %>%
 #' 
 #' A basic examination is done using summary:
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 fetuses %>%
 	summary()
 
@@ -1121,13 +1146,13 @@ fetuses %>%
 #' 
 #' It is a good idea to get into the habit of having separate R script files for data reading/formatting (i.e. steps 1-7) and data analysis.  This helps to keep your R script files shorter and therefore more manageable, and also means that several different data analyses can use the same data reading/formatting R script.  For example, you could create a new R script file and save it with the name 'analysis_fetuses.R'.  Then at the top of your new R script file put the following command:
 #' 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 ## source("tidy_fetuses.R")
 
 #' 
 #' Now if you want to re-load and re-format the data, all you have to do is make sure that your working directory is correct then run this single line in your analysis script.  That means that you can get straight into the analysis without having to scroll through all of the code needed to read and format the data.  If you get an error saying "cannot open file 'tidy_fetuses.R': No such file or directory" when running this command, then check that you saved your 'tidy_fetuses.R' file in the same folder as the 'calf_fetuses.xlsx' data file as instructed at the start of the tutorial.
 #' 
-## ---- echo=FALSE---------------------------------------------------------
+## ---- echo=FALSE--------------------------------------------------------------
 # Check that appendix B and D give the same solution:
 stopifnot(identical(fetuses_target, fetuses))
 

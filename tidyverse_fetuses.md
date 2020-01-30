@@ -91,20 +91,20 @@ library('tidyverse')
 ```
 
 ```
-## ── Attaching packages ─────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ─────────────────── tidyverse 1.3.0 ──
 ```
 
 ```
-## ✔ ggplot2 3.1.0     ✔ purrr   0.3.0
-## ✔ tibble  2.0.1     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.2     ✔ stringr 1.4.0
-## ✔ readr   1.3.1     ✔ forcats 0.3.0
+## ✓ ggplot2 3.2.1     ✓ purrr   0.3.3
+## ✓ tibble  2.1.3     ✓ dplyr   0.8.3
+## ✓ tidyr   1.0.2     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.4.0
 ```
 
 ```
-## ── Conflicts ────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
+## ── Conflicts ────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
 ```
 
 When you run this code, you should see similar output to that shown above.  The 'Conflicts' (and small red crosses next to them) are to be expected, so you can safely ignore these.  But if you get different output to what is shown above, or if you have any problems with package installation such as messages saying that packages are not available for your version of R, then make sure that R and RStudio are updated to the latest versions and try again.  If you still have problems, then let us know ASAP so we can try to resolve them (the most common problems are due to old operating system versions or restricted access on institutional computers).
@@ -225,20 +225,21 @@ fetuses
 
 ```
 ## # A tibble: 262 x 18
-##    parity age_days weight_kg crl_cm head_width_mm head_length_mm hair_coronary_b… hair_ear
-##     <dbl>    <dbl>     <dbl>  <dbl>         <dbl>          <dbl> <chr>            <chr>   
-##  1      3      274    35.5     86.8         128            239   Y                Y       
-##  2      2      196    10.2     61.8          83.8          154   Y                Y       
-##  3      1      259    27.2     89.3         121            220.  Y                Y       
-##  4      1      249    29.1     83           118            215   Y                Y       
-##  5      2      221    16.6     75.4         101.           183   Y                Y       
-##  6      3      221    19.0     77.7          97            189   Y                Y       
-##  7      2      177     6.35    55.4          74.5          142.  Y                N       
-##  8      2       82     0.046   10.4          24.3           36.8 N                N       
-##  9      6      193    11.2     62.4          85.4          153.  Y                N       
-## 10      4      142     1.77    35.4          62.4           99.8 N                N       
-## # … with 252 more rows, and 10 more variables: hair_eyelid <chr>, hair_tail <chr>,
-## #   hair_hornbud <chr>, tactile_muzzle <chr>, tactile_eyebrow <chr>, tactile_eyelash <chr>,
+##    parity age_days weight_kg crl_cm head_width_mm head_length_mm
+##     <dbl>    <dbl>     <dbl>  <dbl>         <dbl>          <dbl>
+##  1      3      274    35.5     86.8         128            239  
+##  2      2      196    10.2     61.8          83.8          154  
+##  3      1      259    27.2     89.3         121            220. 
+##  4      1      249    29.1     83           118            215  
+##  5      2      221    16.6     75.4         101.           183  
+##  6      3      221    19.0     77.7          97            189  
+##  7      2      177     6.35    55.4          74.5          142. 
+##  8      2       82     0.046   10.4          24.3           36.8
+##  9      6      193    11.2     62.4          85.4          153. 
+## 10      4      142     1.77    35.4          62.4           99.8
+## # … with 252 more rows, and 12 more variables: hair_coronary_band <chr>,
+## #   hair_ear <chr>, hair_eyelid <chr>, hair_tail <chr>, hair_hornbud <chr>,
+## #   tactile_muzzle <chr>, tactile_eyebrow <chr>, tactile_eyelash <chr>,
 ## #   eye_op_close <chr>, papillae_tongue <chr>, eyelid <chr>, sex <chr>
 ```
 
@@ -252,33 +253,40 @@ fetuses %>% summary()
 ```
 
 ```
-##      parity         age_days        weight_kg           crl_cm       head_width_mm   
-##  Min.   :1.000   Min.   : 25.00   Min.   : 0.0010   Min.   :  2.00   Min.   :  3.00  
-##  1st Qu.:2.000   1st Qu.: 95.25   1st Qu.: 0.2537   1st Qu.: 18.30   1st Qu.: 39.24  
-##  Median :3.000   Median :136.00   Median : 1.7805   Median : 35.65   Median : 63.33  
-##  Mean   :2.752   Mean   :136.06   Mean   : 5.0029   Mean   : 37.90   Mean   : 62.34  
-##  3rd Qu.:4.000   3rd Qu.:175.00   3rd Qu.: 6.9250   3rd Qu.: 54.60   3rd Qu.: 84.02  
-##  Max.   :6.000   Max.   :274.00   Max.   :41.6000   Max.   :101.30   Max.   :152.00  
-##  head_length_mm   hair_coronary_band   hair_ear         hair_eyelid         hair_tail        
-##  Min.   :  5.00   Length:262         Length:262         Length:262         Length:262        
-##  1st Qu.: 55.52   Class :character   Class :character   Class :character   Class :character  
-##  Median :101.28   Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##  Mean   :103.29                                                                              
-##  3rd Qu.:145.54                                                                              
-##  Max.   :239.00                                                                              
-##  hair_hornbud       tactile_muzzle     tactile_eyebrow    tactile_eyelash    eye_op_close      
-##  Length:262         Length:262         Length:262         Length:262         Length:262        
-##  Class :character   Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##                                                                                                
-##                                                                                                
-##                                                                                                
-##  papillae_tongue       eyelid              sex           
-##  Length:262         Length:262         Length:262        
-##  Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character  
-##                                                          
-##                                                          
+##      parity         age_days        weight_kg           crl_cm      
+##  Min.   :1.000   Min.   : 25.00   Min.   : 0.0010   Min.   :  2.00  
+##  1st Qu.:2.000   1st Qu.: 95.25   1st Qu.: 0.2537   1st Qu.: 18.30  
+##  Median :3.000   Median :136.00   Median : 1.7805   Median : 35.65  
+##  Mean   :2.752   Mean   :136.06   Mean   : 5.0029   Mean   : 37.90  
+##  3rd Qu.:4.000   3rd Qu.:175.00   3rd Qu.: 6.9250   3rd Qu.: 54.60  
+##  Max.   :6.000   Max.   :274.00   Max.   :41.6000   Max.   :101.30  
+##  head_width_mm    head_length_mm   hair_coronary_band   hair_ear        
+##  Min.   :  3.00   Min.   :  5.00   Length:262         Length:262        
+##  1st Qu.: 39.24   1st Qu.: 55.52   Class :character   Class :character  
+##  Median : 63.33   Median :101.28   Mode  :character   Mode  :character  
+##  Mean   : 62.34   Mean   :103.29                                        
+##  3rd Qu.: 84.02   3rd Qu.:145.54                                        
+##  Max.   :152.00   Max.   :239.00                                        
+##  hair_eyelid         hair_tail         hair_hornbud       tactile_muzzle    
+##  Length:262         Length:262         Length:262         Length:262        
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##  tactile_eyebrow    tactile_eyelash    eye_op_close       papillae_tongue   
+##  Length:262         Length:262         Length:262         Length:262        
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##     eyelid              sex           
+##  Length:262         Length:262        
+##  Class :character   Class :character  
+##  Mode  :character   Mode  :character  
+##                                       
+##                                       
 ## 
 ```
 
@@ -313,21 +321,23 @@ fetuses %>%
 
 ```
 ## # A tibble: 262 x 19
-##    parity age_days weight_kg crl_cm head_width_mm head_length_mm hair_coronary_b… hair_ear
-##     <dbl>    <dbl>     <dbl>  <dbl>         <dbl>          <dbl> <chr>            <chr>   
-##  1      3      274    35.5     86.8         128            239   Y                Y       
-##  2      2      196    10.2     61.8          83.8          154   Y                Y       
-##  3      1      259    27.2     89.3         121            220.  Y                Y       
-##  4      1      249    29.1     83           118            215   Y                Y       
-##  5      2      221    16.6     75.4         101.           183   Y                Y       
-##  6      3      221    19.0     77.7          97            189   Y                Y       
-##  7      2      177     6.35    55.4          74.5          142.  Y                N       
-##  8      2       82     0.046   10.4          24.3           36.8 N                N       
-##  9      6      193    11.2     62.4          85.4          153.  Y                N       
-## 10      4      142     1.77    35.4          62.4           99.8 N                N       
-## # … with 252 more rows, and 11 more variables: hair_eyelid <chr>, hair_tail <chr>,
-## #   hair_hornbud <chr>, tactile_muzzle <chr>, tactile_eyebrow <chr>, tactile_eyelash <chr>,
-## #   eye_op_close <chr>, papillae_tongue <chr>, eyelid <chr>, sex <chr>, crl_mm <dbl>
+##    parity age_days weight_kg crl_cm head_width_mm head_length_mm
+##     <dbl>    <dbl>     <dbl>  <dbl>         <dbl>          <dbl>
+##  1      3      274    35.5     86.8         128            239  
+##  2      2      196    10.2     61.8          83.8          154  
+##  3      1      259    27.2     89.3         121            220. 
+##  4      1      249    29.1     83           118            215  
+##  5      2      221    16.6     75.4         101.           183  
+##  6      3      221    19.0     77.7          97            189  
+##  7      2      177     6.35    55.4          74.5          142. 
+##  8      2       82     0.046   10.4          24.3           36.8
+##  9      6      193    11.2     62.4          85.4          153. 
+## 10      4      142     1.77    35.4          62.4           99.8
+## # … with 252 more rows, and 13 more variables: hair_coronary_band <chr>,
+## #   hair_ear <chr>, hair_eyelid <chr>, hair_tail <chr>, hair_hornbud <chr>,
+## #   tactile_muzzle <chr>, tactile_eyebrow <chr>, tactile_eyelash <chr>,
+## #   eye_op_close <chr>, papillae_tongue <chr>, eyelid <chr>, sex <chr>,
+## #   crl_mm <dbl>
 ```
 
 There are three things to note here:
@@ -454,7 +464,8 @@ fetuses <- fetuses_full %>%
 ```
 
 ```
-## Error in .f(.x[[i]], ...): object 'ID' not found
+## Error: Can't subset columns that don't exist.
+## [31mx[39m The column `ID` doesn't exist.
 ```
 
 Notice that the select function gives us variables in the order that we asked for them.  Therefore, we can also use it to re-order the columns of a data frame by typing all of the variable names but in a different sequence:
@@ -544,13 +555,20 @@ fetuses %>%
 ```
 
 ```
-##        ID            parity         age_days     hair_coronary_band hair_coronary_band_fct
-##  Min.   :  1.0   Min.   :1.000   Min.   : 51.0   Length:243         Y: 60                 
-##  1st Qu.: 61.5   1st Qu.:2.000   1st Qu.:107.5   Class :character   N:183                 
-##  Median :122.0   Median :3.000   Median :144.0   Mode  :character                         
-##  Mean   :125.6   Mean   :2.774   Mean   :143.3                                            
-##  3rd Qu.:188.5   3rd Qu.:4.000   3rd Qu.:176.5                                            
-##  Max.   :262.0   Max.   :6.000   Max.   :274.0
+##        ID            parity         age_days     hair_coronary_band
+##  Min.   :  1.0   Min.   :1.000   Min.   : 51.0   Length:243        
+##  1st Qu.: 61.5   1st Qu.:2.000   1st Qu.:107.5   Class :character  
+##  Median :122.0   Median :3.000   Median :144.0   Mode  :character  
+##  Mean   :125.6   Mean   :2.774   Mean   :143.3                     
+##  3rd Qu.:188.5   3rd Qu.:4.000   3rd Qu.:176.5                     
+##  Max.   :262.0   Max.   :6.000   Max.   :274.0                     
+##  hair_coronary_band_fct
+##  Y: 60                 
+##  N:183                 
+##                        
+##                        
+##                        
+## 
 ```
 
 Now we get the number of Y and the number of N for hair_coronary_band_fct.  In this case, that works OK - but what would happen if the data had been entered inconsistently, for example if 'n' had sometimes been used instead of 'N'?  Let's deliberately introduce an error (don't worry about the code itself - you won't do this in real life!):
@@ -588,13 +606,20 @@ fetuses %>%
 ```
 
 ```
-##        ID            parity         age_days     hair_coronary_band hair_coronary_band_fct
-##  Min.   :  1.0   Min.   :1.000   Min.   : 51.0   Length:243         n:  1                 
-##  1st Qu.: 61.5   1st Qu.:2.000   1st Qu.:107.5   Class :character   Y: 59                 
-##  Median :122.0   Median :3.000   Median :144.0   Mode  :character   N:183                 
-##  Mean   :125.6   Mean   :2.774   Mean   :143.3                                            
-##  3rd Qu.:188.5   3rd Qu.:4.000   3rd Qu.:176.5                                            
-##  Max.   :262.0   Max.   :6.000   Max.   :274.0
+##        ID            parity         age_days     hair_coronary_band
+##  Min.   :  1.0   Min.   :1.000   Min.   : 51.0   Length:243        
+##  1st Qu.: 61.5   1st Qu.:2.000   1st Qu.:107.5   Class :character  
+##  Median :122.0   Median :3.000   Median :144.0   Mode  :character  
+##  Mean   :125.6   Mean   :2.774   Mean   :143.3                     
+##  3rd Qu.:188.5   3rd Qu.:4.000   3rd Qu.:176.5                     
+##  Max.   :262.0   Max.   :6.000   Max.   :274.0                     
+##  hair_coronary_band_fct
+##  n:  1                 
+##  Y: 59                 
+##  N:183                 
+##                        
+##                        
+## 
 ```
 
 There are now 3 factor levels in hair_coronary_band_fct:  Y, N and n.  Note that N and n are different, but we don't really want them to be!  We can deal with this by first creating the factor as before, and chaining the data frame into a second mutate where we use fct_collapse to manually recode the factor levels so that Y becomes Yes and both n and N become No, like so:
@@ -603,20 +628,28 @@ There are now 3 factor levels in hair_coronary_band_fct:  Y, N and n.  Note that
 ```r
 fetuses <- fetuses %>%
 	mutate(hair_coronary_band_fct = parse_factor(hair_coronary_band)) %>%
-	mutate(hair_coronary_band_fct = fct_collapse(hair_coronary_band_fct, No = c('N', 'n'), Yes='Y'))
+	mutate(hair_coronary_band_fct = fct_collapse(hair_coronary_band_fct, 
+	                                         No = c('N', 'n'), Yes='Y'))
 
 fetuses %>%
 	summary()
 ```
 
 ```
-##        ID            parity         age_days     hair_coronary_band hair_coronary_band_fct
-##  Min.   :  1.0   Min.   :1.000   Min.   : 51.0   Length:243         No :184               
-##  1st Qu.: 61.5   1st Qu.:2.000   1st Qu.:107.5   Class :character   Yes: 59               
-##  Median :122.0   Median :3.000   Median :144.0   Mode  :character                         
-##  Mean   :125.6   Mean   :2.774   Mean   :143.3                                            
-##  3rd Qu.:188.5   3rd Qu.:4.000   3rd Qu.:176.5                                            
-##  Max.   :262.0   Max.   :6.000   Max.   :274.0
+##        ID            parity         age_days     hair_coronary_band
+##  Min.   :  1.0   Min.   :1.000   Min.   : 51.0   Length:243        
+##  1st Qu.: 61.5   1st Qu.:2.000   1st Qu.:107.5   Class :character  
+##  Median :122.0   Median :3.000   Median :144.0   Mode  :character  
+##  Mean   :125.6   Mean   :2.774   Mean   :143.3                     
+##  3rd Qu.:188.5   3rd Qu.:4.000   3rd Qu.:176.5                     
+##  Max.   :262.0   Max.   :6.000   Max.   :274.0                     
+##  hair_coronary_band_fct
+##  No :184               
+##  Yes: 59               
+##                        
+##                        
+##                        
+## 
 ```
 
 Notice also that the factor levels have swapped around; No is now the reference category because this came first in the arguments to the fct_collapse function.  This will be important later on, when the data need to be used for modelling.
@@ -648,13 +681,20 @@ fetuses %>%
 ```
 
 ```
-##        ID            parity         age_days     hair_coronary_band hair_coronary_band_fct
-##  Min.   :  1.0   Min.   :1.000   Min.   : 51.0   Length:243         N   :183              
-##  1st Qu.: 61.5   1st Qu.:2.000   1st Qu.:107.5   Class :character   Y   : 59              
-##  Median :122.0   Median :3.000   Median :144.0   Mode  :character   NA's:  1              
-##  Mean   :125.6   Mean   :2.774   Mean   :143.3                                            
-##  3rd Qu.:188.5   3rd Qu.:4.000   3rd Qu.:176.5                                            
-##  Max.   :262.0   Max.   :6.000   Max.   :274.0
+##        ID            parity         age_days     hair_coronary_band
+##  Min.   :  1.0   Min.   :1.000   Min.   : 51.0   Length:243        
+##  1st Qu.: 61.5   1st Qu.:2.000   1st Qu.:107.5   Class :character  
+##  Median :122.0   Median :3.000   Median :144.0   Mode  :character  
+##  Mean   :125.6   Mean   :2.774   Mean   :143.3                     
+##  3rd Qu.:188.5   3rd Qu.:4.000   3rd Qu.:176.5                     
+##  Max.   :262.0   Max.   :6.000   Max.   :274.0                     
+##  hair_coronary_band_fct
+##  N   :183              
+##  Y   : 59              
+##  NA's:  1              
+##                        
+##                        
+## 
 ```
 
 This is good because R has automatically alerted us to a problem that we need to fix.  So we can go back and adjust our code so it looks like this:
@@ -662,8 +702,10 @@ This is good because R has automatically alerted us to a problem that we need to
 
 ```r
 fetuses <- fetuses %>%
-	mutate(hair_coronary_band_fct = parse_factor(hair_coronary_band, levels=c('N','n','Y'))) %>%
-	mutate(hair_coronary_band_fct = fct_collapse(hair_coronary_band_fct, No = c('N', 'n'), Yes='Y'))
+	mutate(hair_coronary_band_fct = 
+	         parse_factor(hair_coronary_band, levels=c('N','n','Y'))) %>%
+	mutate(hair_coronary_band_fct = 
+	         fct_collapse(hair_coronary_band_fct, No = c('N', 'n'), Yes='Y'))
 ```
 
 This tells R to expect the 'n' entry, but then immediately re-codes it afterwards - this approach will fix known problems in the data, but still automatically alert us to any new problems that might occur if e.g. we update the data to include more observations (and different mistakes!).  
@@ -693,13 +735,20 @@ fetuses %>%
 ```
 
 ```
-##        ID            parity         age_days     hair_coronary_band hair_coronary_band_fct
-##  Min.   :  1.0   Min.   :1.000   Min.   : 51.0   Length:243         N   :183              
-##  1st Qu.: 61.5   1st Qu.:2.000   1st Qu.:107.5   Class :character   Y   : 58              
-##  Median :122.0   Median :3.000   Median :144.0   Mode  :character   NA  :  1              
-##  Mean   :125.6   Mean   :2.774   Mean   :143.3                      NA's:  1              
-##  3rd Qu.:188.5   3rd Qu.:4.000   3rd Qu.:176.5                                            
-##  Max.   :262.0   Max.   :6.000   Max.   :274.0
+##        ID            parity         age_days     hair_coronary_band
+##  Min.   :  1.0   Min.   :1.000   Min.   : 51.0   Length:243        
+##  1st Qu.: 61.5   1st Qu.:2.000   1st Qu.:107.5   Class :character  
+##  Median :122.0   Median :3.000   Median :144.0   Mode  :character  
+##  Mean   :125.6   Mean   :2.774   Mean   :143.3                     
+##  3rd Qu.:188.5   3rd Qu.:4.000   3rd Qu.:176.5                     
+##  Max.   :262.0   Max.   :6.000   Max.   :274.0                     
+##  hair_coronary_band_fct
+##  N   :183              
+##  Y   : 58              
+##  NA  :  1              
+##  NA's:  1              
+##                        
+## 
 ```
 
 We have both the factor level NA (the value that was missing to start with) and NA's (the value of 'n' that became missing because it wasn't included in the allowed levels).  But this subtle distinction is not visible in the data itself:
@@ -713,16 +762,16 @@ fetuses
 ## # A tibble: 243 x 5
 ##       ID parity age_days hair_coronary_band hair_coronary_band_fct
 ##    <int>  <dbl>    <dbl> <chr>              <fct>                 
-##  1     1      3      274 n                  <NA>                  
+##  1     1      3      274 "n"                <NA>                  
 ##  2     2      2      196 ""                 <NA>                  
-##  3     3      1      259 Y                  Y                     
-##  4     4      1      249 Y                  Y                     
-##  5     5      2      221 Y                  Y                     
-##  6     6      3      221 Y                  Y                     
-##  7     7      2      177 Y                  Y                     
-##  8     8      2       82 N                  N                     
-##  9     9      6      193 Y                  Y                     
-## 10    10      4      142 N                  N                     
+##  3     3      1      259 "Y"                Y                     
+##  4     4      1      249 "Y"                Y                     
+##  5     5      2      221 "Y"                Y                     
+##  6     6      3      221 "Y"                Y                     
+##  7     7      2      177 "Y"                Y                     
+##  8     8      2       82 "N"                N                     
+##  9     9      6      193 "Y"                Y                     
+## 10    10      4      142 "N"                N                     
 ## # … with 233 more rows
 ```
 
@@ -731,7 +780,8 @@ Having this distinction can sometimes be useful, but if we want to remove the NA
 
 ```r
 fetuses <- fetuses %>%
-	mutate(hair_coronary_band_fct = parse_factor(hair_coronary_band, levels=c('N','Y'), include_na = FALSE))
+	mutate(hair_coronary_band_fct = 
+	         parse_factor(hair_coronary_band, levels=c('N','Y'), include_na = FALSE))
 ```
 
 ```
@@ -746,13 +796,20 @@ fetuses %>%
 ```
 
 ```
-##        ID            parity         age_days     hair_coronary_band hair_coronary_band_fct
-##  Min.   :  1.0   Min.   :1.000   Min.   : 51.0   Length:243         N   :183              
-##  1st Qu.: 61.5   1st Qu.:2.000   1st Qu.:107.5   Class :character   Y   : 58              
-##  Median :122.0   Median :3.000   Median :144.0   Mode  :character   NA's:  2              
-##  Mean   :125.6   Mean   :2.774   Mean   :143.3                                            
-##  3rd Qu.:188.5   3rd Qu.:4.000   3rd Qu.:176.5                                            
-##  Max.   :262.0   Max.   :6.000   Max.   :274.0
+##        ID            parity         age_days     hair_coronary_band
+##  Min.   :  1.0   Min.   :1.000   Min.   : 51.0   Length:243        
+##  1st Qu.: 61.5   1st Qu.:2.000   1st Qu.:107.5   Class :character  
+##  Median :122.0   Median :3.000   Median :144.0   Mode  :character  
+##  Mean   :125.6   Mean   :2.774   Mean   :143.3                     
+##  3rd Qu.:188.5   3rd Qu.:4.000   3rd Qu.:176.5                     
+##  Max.   :262.0   Max.   :6.000   Max.   :274.0                     
+##  hair_coronary_band_fct
+##  N   :183              
+##  Y   : 58              
+##  NA's:  2              
+##                        
+##                        
+## 
 ```
 
 Now there is no distinction between the blank entry and the entry that was originally 'n' - they are both NA's.  Alternatively, you can remove the NA factor level (or any other factor level that you want to) by setting it to NULL within fct_collapse:
@@ -760,21 +817,30 @@ Now there is no distinction between the blank entry and the entry that was origi
 
 ```r
 fetuses <- fetuses %>%
-	mutate(hair_coronary_band = parse_factor(hair_coronary_band, levels=c('N','n','Y'))) %>%
-	mutate(hair_coronary_band = fct_collapse(hair_coronary_band, NULL = 'NA', No = c('N', 'n'), Yes='Y'))
+	mutate(hair_coronary_band = 
+	         parse_factor(hair_coronary_band, levels=c('N','n','Y'))) %>%
+	mutate(hair_coronary_band = 
+	         fct_collapse(hair_coronary_band, NULL = 'NA', No = c('N', 'n'), Yes='Y'))
 
 fetuses %>%
 	summary()
 ```
 
 ```
-##        ID            parity         age_days     hair_coronary_band hair_coronary_band_fct
-##  Min.   :  1.0   Min.   :1.000   Min.   : 51.0   No  :184           N   :183              
-##  1st Qu.: 61.5   1st Qu.:2.000   1st Qu.:107.5   Yes : 58           Y   : 58              
-##  Median :122.0   Median :3.000   Median :144.0   NA's:  1           NA's:  2              
-##  Mean   :125.6   Mean   :2.774   Mean   :143.3                                            
-##  3rd Qu.:188.5   3rd Qu.:4.000   3rd Qu.:176.5                                            
-##  Max.   :262.0   Max.   :6.000   Max.   :274.0
+##        ID            parity         age_days     hair_coronary_band
+##  Min.   :  1.0   Min.   :1.000   Min.   : 51.0   No  :184          
+##  1st Qu.: 61.5   1st Qu.:2.000   1st Qu.:107.5   Yes : 58          
+##  Median :122.0   Median :3.000   Median :144.0   NA's:  1          
+##  Mean   :125.6   Mean   :2.774   Mean   :143.3                     
+##  3rd Qu.:188.5   3rd Qu.:4.000   3rd Qu.:176.5                     
+##  Max.   :262.0   Max.   :6.000   Max.   :274.0                     
+##  hair_coronary_band_fct
+##  N   :183              
+##  Y   : 58              
+##  NA's:  2              
+##                        
+##                        
+## 
 ```
 
 Notice this time that I have replaced the existing variable hair_coronary_band rather than creating a new variable - generally we will want to do this when creating factors, as the original text entries are no longer needed.  This has destroyed the original text variable though, so we will not be able to re-run this line of code without running the entire R code from the beginning: the easiest way to do this is by clicking on source.
@@ -838,8 +904,8 @@ str_c('Parity_', seq(from=1, to=10, by=1))
 ```
 
 ```
-##  [1] "Parity_1"  "Parity_2"  "Parity_3"  "Parity_4"  "Parity_5"  "Parity_6"  "Parity_7"  "Parity_8" 
-##  [9] "Parity_9"  "Parity_10"
+##  [1] "Parity_1"  "Parity_2"  "Parity_3"  "Parity_4"  "Parity_5"  "Parity_6" 
+##  [7] "Parity_7"  "Parity_8"  "Parity_9"  "Parity_10"
 ```
 
 The seq() function creates all possible numbers between from (1) and to (10), with increments of by (1). If you already knew that the range was narrower (for example only parities 1 to 6 were observed) then you could adjust the code accordingly - we will discuss a way to check this later on.
@@ -859,14 +925,22 @@ fetuses %>%
 ```
 
 ```
-##        ID            parity         age_days     hair_coronary_band    parity_fct  parity_group
-##  Min.   :  1.0   Min.   :1.000   Min.   : 51.0   No  :184           Parity_2:79   First  : 40  
-##  1st Qu.: 61.5   1st Qu.:2.000   1st Qu.:107.5   Yes : 58           Parity_3:56   Second : 79  
-##  Median :122.0   Median :3.000   Median :144.0   NA's:  1           Parity_4:45   Older  :124  
-##  Mean   :125.6   Mean   :2.774   Mean   :143.3                      Parity_1:40   Ancient:  0  
-##  3rd Qu.:188.5   3rd Qu.:4.000   3rd Qu.:176.5                      Parity_6:13                
-##  Max.   :262.0   Max.   :6.000   Max.   :274.0                      Parity_5:10                
-##                                                                     (Other) : 0
+##        ID            parity         age_days     hair_coronary_band
+##  Min.   :  1.0   Min.   :1.000   Min.   : 51.0   No  :184          
+##  1st Qu.: 61.5   1st Qu.:2.000   1st Qu.:107.5   Yes : 58          
+##  Median :122.0   Median :3.000   Median :144.0   NA's:  1          
+##  Mean   :125.6   Mean   :2.774   Mean   :143.3                     
+##  3rd Qu.:188.5   3rd Qu.:4.000   3rd Qu.:176.5                     
+##  Max.   :262.0   Max.   :6.000   Max.   :274.0                     
+##                                                                    
+##     parity_fct  parity_group
+##  Parity_2:79   First  : 40  
+##  Parity_3:56   Second : 79  
+##  Parity_4:45   Older  :124  
+##  Parity_1:40   Ancient:  0  
+##  Parity_6:13                
+##  Parity_5:10                
+##  (Other) : 0
 ```
 
 This code looks quite complicated, but if you break it down into steps you should be able to see what is going on.  The first mutate function just combines the separate steps we had before - first using str_c() to add the text 'Parity_' to the parity number, then parsing this into a factor using specified levels.  The second mutate function uses fct_collapse to create a second factor of parity_group, where we combine parities 3-9 into a single group.
@@ -883,13 +957,20 @@ fetuses %>%
 ```
 
 ```
-##        ID            parity         age_days     hair_coronary_band    parity_fct parity_group
-##  Min.   :  1.0   Min.   :1.000   Min.   : 51.0   No  :184           Parity_1:40   First : 40  
-##  1st Qu.: 61.5   1st Qu.:2.000   1st Qu.:107.5   Yes : 58           Parity_2:79   Second: 79  
-##  Median :122.0   Median :3.000   Median :144.0   NA's:  1           Parity_3:56   Older :124  
-##  Mean   :125.6   Mean   :2.774   Mean   :143.3                      Parity_4:45               
-##  3rd Qu.:188.5   3rd Qu.:4.000   3rd Qu.:176.5                      Parity_5:10               
-##  Max.   :262.0   Max.   :6.000   Max.   :274.0                      Parity_6:13
+##        ID            parity         age_days     hair_coronary_band
+##  Min.   :  1.0   Min.   :1.000   Min.   : 51.0   No  :184          
+##  1st Qu.: 61.5   1st Qu.:2.000   1st Qu.:107.5   Yes : 58          
+##  Median :122.0   Median :3.000   Median :144.0   NA's:  1          
+##  Mean   :125.6   Mean   :2.774   Mean   :143.3                     
+##  3rd Qu.:188.5   3rd Qu.:4.000   3rd Qu.:176.5                     
+##  Max.   :262.0   Max.   :6.000   Max.   :274.0                     
+##     parity_fct parity_group
+##  Parity_1:40   First : 40  
+##  Parity_2:79   Second: 79  
+##  Parity_3:56   Older :124  
+##  Parity_4:45               
+##  Parity_5:10               
+##  Parity_6:13
 ```
 
 There is now no more mention of 'Ancient' cows in parity_group.  Notice here that rather than using two separate mutate() functions, I mutated two variables within the same function separated by a comma.  The two approaches are the same.
@@ -934,29 +1015,30 @@ Turning **continous numbers into factors** uses a slightly different method with
 
 ```r
 fetuses <- fetuses %>%
-	mutate(age_group = cut(age_days, breaks=c(0, 100, 200, 300), labels=c('Early', 'Middle', 'Late')))
+	mutate(age_group = 
+	     cut(age_days, breaks=c(0, 100, 200, 300), labels=c('Early', 'Middle', 'Late')))
 
 fetuses %>%
 	summary()
 ```
 
 ```
-##        ID          parity         age_days     hair_coronary_band    parity_fct parity_group
-##  ID_001 :  1   Min.   :1.000   Min.   : 51.0   No  :184           Parity_1:40   First : 40  
-##  ID_002 :  1   1st Qu.:2.000   1st Qu.:107.5   Yes : 58           Parity_2:79   Second: 79  
-##  ID_003 :  1   Median :3.000   Median :144.0   NA's:  1           Parity_3:56   Older :124  
-##  ID_004 :  1   Mean   :2.774   Mean   :143.3                      Parity_4:45               
-##  ID_005 :  1   3rd Qu.:4.000   3rd Qu.:176.5                      Parity_5:10               
-##  ID_006 :  1   Max.   :6.000   Max.   :274.0                      Parity_6:13               
-##  (Other):237                                                                                
-##    ID_simple    age_group  
-##  ID_1   :  1   Early : 54  
-##  ID_2   :  1   Middle:159  
-##  ID_3   :  1   Late  : 30  
-##  ID_4   :  1               
-##  ID_5   :  1               
-##  ID_6   :  1               
-##  (Other):237
+##        ID          parity         age_days     hair_coronary_band    parity_fct
+##  ID_001 :  1   Min.   :1.000   Min.   : 51.0   No  :184           Parity_1:40  
+##  ID_002 :  1   1st Qu.:2.000   1st Qu.:107.5   Yes : 58           Parity_2:79  
+##  ID_003 :  1   Median :3.000   Median :144.0   NA's:  1           Parity_3:56  
+##  ID_004 :  1   Mean   :2.774   Mean   :143.3                      Parity_4:45  
+##  ID_005 :  1   3rd Qu.:4.000   3rd Qu.:176.5                      Parity_5:10  
+##  ID_006 :  1   Max.   :6.000   Max.   :274.0                      Parity_6:13  
+##  (Other):237                                                                   
+##  parity_group   ID_simple    age_group  
+##  First : 40   ID_1   :  1   Early : 54  
+##  Second: 79   ID_2   :  1   Middle:159  
+##  Older :124   ID_3   :  1   Late  : 30  
+##               ID_4   :  1               
+##               ID_5   :  1               
+##               ID_6   :  1               
+##               (Other):237
 ```
 
 The breaks argument must always specify the lowest and highest possible values as the first and last numbers, so there is always one more group label than there are breaks.  By default the breaks define intervals that are open on the left and closed on the right, so a number exactly equal to a break goes into the category below this break.  For example, here we have categories defined as:
@@ -974,29 +1056,30 @@ We can also use the cut function with discrete numbers, although we have to be e
 
 ```r
 fetuses <- fetuses %>%
-	mutate(parity_fct_cut = cut(parity, breaks=c(0.5, 1.5, 2.5, 10.5), labels=c('First','Second','Older')))
+	mutate(parity_fct_cut = cut(parity, breaks=c(0.5, 1.5, 2.5, 10.5), 
+	                            labels=c('First','Second','Older')))
 
 fetuses %>%
 	summary()
 ```
 
 ```
-##        ID          parity         age_days     hair_coronary_band    parity_fct parity_group
-##  ID_001 :  1   Min.   :1.000   Min.   : 51.0   No  :184           Parity_1:40   First : 40  
-##  ID_002 :  1   1st Qu.:2.000   1st Qu.:107.5   Yes : 58           Parity_2:79   Second: 79  
-##  ID_003 :  1   Median :3.000   Median :144.0   NA's:  1           Parity_3:56   Older :124  
-##  ID_004 :  1   Mean   :2.774   Mean   :143.3                      Parity_4:45               
-##  ID_005 :  1   3rd Qu.:4.000   3rd Qu.:176.5                      Parity_5:10               
-##  ID_006 :  1   Max.   :6.000   Max.   :274.0                      Parity_6:13               
-##  (Other):237                                                                                
-##    ID_simple    age_group   parity_fct_cut
-##  ID_1   :  1   Early : 54   First : 40    
-##  ID_2   :  1   Middle:159   Second: 79    
-##  ID_3   :  1   Late  : 30   Older :124    
-##  ID_4   :  1                              
-##  ID_5   :  1                              
-##  ID_6   :  1                              
-##  (Other):237
+##        ID          parity         age_days     hair_coronary_band    parity_fct
+##  ID_001 :  1   Min.   :1.000   Min.   : 51.0   No  :184           Parity_1:40  
+##  ID_002 :  1   1st Qu.:2.000   1st Qu.:107.5   Yes : 58           Parity_2:79  
+##  ID_003 :  1   Median :3.000   Median :144.0   NA's:  1           Parity_3:56  
+##  ID_004 :  1   Mean   :2.774   Mean   :143.3                      Parity_4:45  
+##  ID_005 :  1   3rd Qu.:4.000   3rd Qu.:176.5                      Parity_5:10  
+##  ID_006 :  1   Max.   :6.000   Max.   :274.0                      Parity_6:13  
+##  (Other):237                                                                   
+##  parity_group   ID_simple    age_group   parity_fct_cut
+##  First : 40   ID_1   :  1   Early : 54   First : 40    
+##  Second: 79   ID_2   :  1   Middle:159   Second: 79    
+##  Older :124   ID_3   :  1   Late  : 30   Older :124    
+##               ID_4   :  1                              
+##               ID_5   :  1                              
+##               ID_6   :  1                              
+##               (Other):237
 ```
 
 This parity_fct_cut variable is identical to the parity_fct variable that we created above.
@@ -1273,34 +1356,41 @@ fetuses_full %>%
 ```
 
 ```
-##      parity         age_days        weight_kg           crl_cm       head_width_mm   
-##  Min.   :1.000   Min.   : 25.00   Min.   : 0.0010   Min.   :  2.00   Min.   :  3.00  
-##  1st Qu.:2.000   1st Qu.: 95.25   1st Qu.: 0.2537   1st Qu.: 18.30   1st Qu.: 39.24  
-##  Median :3.000   Median :136.00   Median : 1.7805   Median : 35.65   Median : 63.33  
-##  Mean   :2.752   Mean   :136.06   Mean   : 5.0029   Mean   : 37.90   Mean   : 62.34  
-##  3rd Qu.:4.000   3rd Qu.:175.00   3rd Qu.: 6.9250   3rd Qu.: 54.60   3rd Qu.: 84.02  
-##  Max.   :6.000   Max.   :274.00   Max.   :41.6000   Max.   :101.30   Max.   :152.00  
-##  head_length_mm   hair_coronary_band   hair_ear         hair_eyelid         hair_tail        
-##  Min.   :  5.00   Length:262         Length:262         Length:262         Length:262        
-##  1st Qu.: 55.52   Class :character   Class :character   Class :character   Class :character  
-##  Median :101.28   Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##  Mean   :103.29                                                                              
-##  3rd Qu.:145.54                                                                              
-##  Max.   :239.00                                                                              
-##  hair_hornbud       tactile_muzzle     tactile_eyebrow    tactile_eyelash    eye_op_close      
-##  Length:262         Length:262         Length:262         Length:262         Length:262        
-##  Class :character   Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##                                                                                                
-##                                                                                                
-##                                                                                                
-##  papillae_tongue       eyelid              sex                crl_mm      
-##  Length:262         Length:262         Length:262         Min.   :  20.0  
-##  Class :character   Class :character   Class :character   1st Qu.: 183.0  
-##  Mode  :character   Mode  :character   Mode  :character   Median : 356.5  
-##                                                           Mean   : 379.0  
-##                                                           3rd Qu.: 546.0  
-##                                                           Max.   :1013.0
+##      parity         age_days        weight_kg           crl_cm      
+##  Min.   :1.000   Min.   : 25.00   Min.   : 0.0010   Min.   :  2.00  
+##  1st Qu.:2.000   1st Qu.: 95.25   1st Qu.: 0.2537   1st Qu.: 18.30  
+##  Median :3.000   Median :136.00   Median : 1.7805   Median : 35.65  
+##  Mean   :2.752   Mean   :136.06   Mean   : 5.0029   Mean   : 37.90  
+##  3rd Qu.:4.000   3rd Qu.:175.00   3rd Qu.: 6.9250   3rd Qu.: 54.60  
+##  Max.   :6.000   Max.   :274.00   Max.   :41.6000   Max.   :101.30  
+##  head_width_mm    head_length_mm   hair_coronary_band   hair_ear        
+##  Min.   :  3.00   Min.   :  5.00   Length:262         Length:262        
+##  1st Qu.: 39.24   1st Qu.: 55.52   Class :character   Class :character  
+##  Median : 63.33   Median :101.28   Mode  :character   Mode  :character  
+##  Mean   : 62.34   Mean   :103.29                                        
+##  3rd Qu.: 84.02   3rd Qu.:145.54                                        
+##  Max.   :152.00   Max.   :239.00                                        
+##  hair_eyelid         hair_tail         hair_hornbud       tactile_muzzle    
+##  Length:262         Length:262         Length:262         Length:262        
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##  tactile_eyebrow    tactile_eyelash    eye_op_close       papillae_tongue   
+##  Length:262         Length:262         Length:262         Length:262        
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##     eyelid              sex                crl_mm      
+##  Length:262         Length:262         Min.   :  20.0  
+##  Class :character   Class :character   1st Qu.: 183.0  
+##  Mode  :character   Mode  :character   Median : 356.5  
+##                                        Mean   : 379.0  
+##                                        3rd Qu.: 546.0  
+##                                        Max.   :1013.0
 ```
 
 We now know how to format each of these variables as either a factor or number one by one - for example:
@@ -1327,27 +1417,34 @@ fetuses %>%
 ```
 
 ```
-##      parity         age_days        weight_kg           crl_cm       head_width_mm   
-##  Min.   :1.000   Min.   : 25.00   Min.   : 0.0010   Min.   :  2.00   Min.   :  3.00  
-##  1st Qu.:2.000   1st Qu.: 95.25   1st Qu.: 0.2537   1st Qu.: 18.30   1st Qu.: 39.24  
-##  Median :3.000   Median :136.00   Median : 1.7805   Median : 35.65   Median : 63.33  
-##  Mean   :2.752   Mean   :136.06   Mean   : 5.0029   Mean   : 37.90   Mean   : 62.34  
-##  3rd Qu.:4.000   3rd Qu.:175.00   3rd Qu.: 6.9250   3rd Qu.: 54.60   3rd Qu.: 84.02  
-##  Max.   :6.000   Max.   :274.00   Max.   :41.6000   Max.   :101.30   Max.   :152.00  
-##  head_length_mm   hair_coronary_band hair_ear hair_eyelid hair_tail hair_hornbud     tactile_muzzle
-##  Min.   :  5.00   N:202              N:221    N:197       N:179     N:175        Visible    :169   
-##  1st Qu.: 55.52   Y: 60              Y: 41    Y: 65       Y: 83     Y: 87        Not visible: 34   
-##  Median :101.28                                                                  Hairsack   : 59   
-##  Mean   :103.29                                                                                    
-##  3rd Qu.:145.54                                                                                    
-##  Max.   :239.00                                                                                    
-##     tactile_eyebrow    tactile_eyelash eye_op_close      papillae_tongue eyelid        sex     
-##  Visible    :169    Visible    :109    Open  : 37   Whole tongue :164    Y:241   Female  :110  
-##  Not visible: 43    Not visible:130    Closed:225   None         : 35    N: 21   Male    :128  
-##  Hairsack   : 50    Hairsack   : 23                 Large front  : 35            Non Diff: 24  
-##                                                     Furthest back: 28                          
-##                                                                                                
-##                                                                                                
+##      parity         age_days        weight_kg           crl_cm      
+##  Min.   :1.000   Min.   : 25.00   Min.   : 0.0010   Min.   :  2.00  
+##  1st Qu.:2.000   1st Qu.: 95.25   1st Qu.: 0.2537   1st Qu.: 18.30  
+##  Median :3.000   Median :136.00   Median : 1.7805   Median : 35.65  
+##  Mean   :2.752   Mean   :136.06   Mean   : 5.0029   Mean   : 37.90  
+##  3rd Qu.:4.000   3rd Qu.:175.00   3rd Qu.: 6.9250   3rd Qu.: 54.60  
+##  Max.   :6.000   Max.   :274.00   Max.   :41.6000   Max.   :101.30  
+##  head_width_mm    head_length_mm   hair_coronary_band hair_ear hair_eyelid
+##  Min.   :  3.00   Min.   :  5.00   N:202              N:221    N:197      
+##  1st Qu.: 39.24   1st Qu.: 55.52   Y: 60              Y: 41    Y: 65      
+##  Median : 63.33   Median :101.28                                          
+##  Mean   : 62.34   Mean   :103.29                                          
+##  3rd Qu.: 84.02   3rd Qu.:145.54                                          
+##  Max.   :152.00   Max.   :239.00                                          
+##  hair_tail hair_hornbud     tactile_muzzle    tactile_eyebrow
+##  N:179     N:175        Visible    :169    Visible    :169   
+##  Y: 83     Y: 87        Not visible: 34    Not visible: 43   
+##                         Hairsack   : 59    Hairsack   : 50   
+##                                                              
+##                                                              
+##                                                              
+##     tactile_eyelash eye_op_close      papillae_tongue eyelid        sex     
+##  Visible    :109    Open  : 37   Whole tongue :164    Y:241   Female  :110  
+##  Not visible:130    Closed:225   None         : 35    N: 21   Male    :128  
+##  Hairsack   : 23                 Large front  : 35            Non Diff: 24  
+##                                  Furthest back: 28                          
+##                                                                             
+##                                                                             
 ##      crl_mm      
 ##  Min.   :  20.0  
 ##  1st Qu.: 183.0  
@@ -1392,7 +1489,40 @@ ggplot(fetuses_full, aes(x=head_width_mm, y=head_length_mm)) +
 
 ![](tidyverse_fetuses_files/figure-html/unnamed-chunk-62-1.png)<!-- -->
 
-There are two types of plots that are particularly useful for summarising data: histograms and box plots.  We can create these using similar code:
+These graphs look OK electronically but the grey background is not ideal for printing (or for use in publication).  To change the default theme to a simpler black and white colour scheme use the following:
+
+
+```r
+theme_set(theme_bw())
+```
+
+All future plots within this R session will now use this colour scheme.  Note that you can also save plots to file, for example as PDF or TIFF format, using the ggsave function:
+
+
+```r
+ggplot(fetuses_full, aes(x=head_width_mm, y=head_length_mm)) +
+	geom_point() +
+	stat_smooth()
+```
+
+![](tidyverse_fetuses_files/figure-html/unnamed-chunk-64-1.png)<!-- -->
+
+```r
+ggsave('headlengthvswidth.pdf')
+ggsave('headlengthvswidth.tiff')
+```
+
+To see additional options for e.g. the height and width of these plots, see the help file for ggsave by typing:
+
+
+```r
+?ggsave
+```
+
+
+### Summary plots
+
+There are two types of plots that are particularly useful for summarising data: histograms and box plots.  We can create these using similar code to the basic plot above:
 
 
 ```r
@@ -1400,14 +1530,14 @@ ggplot(fetuses_full, aes(x=head_width_mm)) +
 	geom_histogram(binwidth=10)
 ```
 
-![](tidyverse_fetuses_files/figure-html/unnamed-chunk-63-1.png)<!-- -->
+![](tidyverse_fetuses_files/figure-html/unnamed-chunk-66-1.png)<!-- -->
 
 ```r
 ggplot(fetuses_full, aes(y=head_width_mm, x=hair_coronary_band)) +
 	geom_boxplot()
 ```
 
-![](tidyverse_fetuses_files/figure-html/unnamed-chunk-63-2.png)<!-- -->
+![](tidyverse_fetuses_files/figure-html/unnamed-chunk-66-2.png)<!-- -->
 
 Notice that the histogram does not need us to specify anything for the y-axis: the frequencies are automatically calculated for us.  These two plots tell us that head_width_mm is approximately normally distributed, and that it is strongly associated with the presence of hair on the coronary band.  There do not seem to be any extreme values, so there is no evidence of data entry mistakes for this variable based on these plots.
 
@@ -1419,7 +1549,7 @@ ggplot(fetuses_full, aes(x=hair_coronary_band)) +
 	geom_bar()
 ```
 
-![](tidyverse_fetuses_files/figure-html/unnamed-chunk-64-1.png)<!-- -->
+![](tidyverse_fetuses_files/figure-html/unnamed-chunk-67-1.png)<!-- -->
 
 This tells us that most of the fetuses do not have hair on the corony band.  If we wanted to see how this related to another categorical variable, then we can create a stacked bar chart by using the fill argument to aes:
 
@@ -1429,7 +1559,7 @@ ggplot(fetuses_full, aes(x=hair_coronary_band, fill=hair_tail)) +
 	geom_bar()
 ```
 
-![](tidyverse_fetuses_files/figure-html/unnamed-chunk-65-1.png)<!-- -->
+![](tidyverse_fetuses_files/figure-html/unnamed-chunk-68-1.png)<!-- -->
 
 We will do more with plots later in the course, but if you want to read more about ggplot now then see the Data visualisation chapter of the R for Data Science book (https://r4ds.had.co.nz/data-visualisation.html).  There is also a cookbook for common plot recipes using ggplot at:  http://www.cookbook-r.com/Graphs/  
 
@@ -1489,7 +1619,7 @@ ggplot(long, aes(x=TimePoint, y=Weight, col=ID, group=ID)) +
 	geom_point()
 ```
 
-![](tidyverse_fetuses_files/figure-html/unnamed-chunk-68-1.png)<!-- -->
+![](tidyverse_fetuses_files/figure-html/unnamed-chunk-71-1.png)<!-- -->
 
 The argument col=ID has been added to the aes() function so we can see which observations belong to which person, and also a new layer geom_line() which connects the observations within the group specified as group=ID within the aes() function.
 
@@ -1504,7 +1634,7 @@ ggplot(fetuses_full, aes(x=age_days, y=head_width_mm)) +
 	geom_point()
 ```
 
-![](tidyverse_fetuses_files/figure-html/unnamed-chunk-69-1.png)<!-- -->
+![](tidyverse_fetuses_files/figure-html/unnamed-chunk-72-1.png)<!-- -->
 
 But how do we add head_length_mm and crl_cm to this plot?  We need to convert the data into long format, and then make the plot:
 
@@ -1532,7 +1662,7 @@ ggplot(plotdata, aes(x=age_days, y=Length, col=Measurement)) +
 	geom_point()
 ```
 
-![](tidyverse_fetuses_files/figure-html/unnamed-chunk-70-1.png)<!-- -->
+![](tidyverse_fetuses_files/figure-html/unnamed-chunk-73-1.png)<!-- -->
 
 This code has several steps:  first we add an ID variable so that we know how the rows in the new data frame relate to the rows in the fetuses_full data frame, then we extract the variables we are interested in using select(), then we use gather to convert all columns in the data into long format (with the exception of ID and age_days), then we make the plot.  You can see from the structure of plotdata that we now have 786 observations, which is exactly three times the original 262 observations because each ID is repeated three times.  This process of creating a new data frame containing the specific data that we want to plot (and in the correct format) is something we will do a lot.
 
@@ -1546,7 +1676,10 @@ plotdata <- fetuses_full %>%
 	select(ID, age_days, crl_cm, head_width_mm, head_length_mm, weight_kg) %>% 
 	gather(Measurement, Length, -ID, -age_days) %>%
 	mutate(Measurement = parse_factor(Measurement)) %>%
-	mutate(Measurement = fct_collapse(Measurement, "CRL (cm)"="crl_cm", "Head Width (mm)"="head_width_mm", "Head Length (mm)"="head_length_mm", "Weight (kg)"="weight_kg"))
+	mutate(Measurement = 
+	   fct_collapse(Measurement, "CRL (cm)"="crl_cm", 
+	     "Head Width (mm)"="head_width_mm", "Head Length (mm)"="head_length_mm",
+	     "Weight (kg)"="weight_kg"))
 
 ggplot(plotdata, aes(x=age_days, y=Length, col=Measurement)) +
 	geom_point() +
@@ -1554,7 +1687,7 @@ ggplot(plotdata, aes(x=age_days, y=Length, col=Measurement)) +
 	ylab('')
 ```
 
-![](tidyverse_fetuses_files/figure-html/unnamed-chunk-71-1.png)<!-- -->
+![](tidyverse_fetuses_files/figure-html/unnamed-chunk-74-1.png)<!-- -->
 
 The only addition is that the x-axis label and names of the factor levels have been changed to a more readable format, and the y-axis label has been removed as weight isn't a length! But the weight is on a different scale to the other variables so is hard to see at the bottom of the graph.  There are two ways to improve this: we could change the units of weight so that 1 y-axis value represented 100g rather than 1kg, but it is probably a better idea to put the different variables into different facets using the facet_wrap() function:
 
@@ -1567,7 +1700,7 @@ ggplot(plotdata, aes(x=age_days, y=Length)) +
 	facet_wrap(~Measurement, scales='free_y') 
 ```
 
-![](tidyverse_fetuses_files/figure-html/unnamed-chunk-72-1.png)<!-- -->
+![](tidyverse_fetuses_files/figure-html/unnamed-chunk-75-1.png)<!-- -->
 
 The facet_wrap (and related facet_grid) funtion allow us to specify one or more categorical variable on which we can stratify the plot into different sub-plots.  The scales='free_y' argument tells facet_wrap to use different y-axis scales for each variable type.
 
@@ -1637,37 +1770,45 @@ fetuses %>%
 ```
 
 ```
-##        ID            sex           parity   parity_group    age_days       age_group  
-##  ID_001 :  1   Female  :110   Parity_1:47   First : 47   Min.   : 25.00   Early : 73  
-##  ID_002 :  1   Male    :128   Parity_2:83   Second: 83   1st Qu.: 95.25   Middle:159  
-##  ID_003 :  1   Non Diff: 24   Parity_3:60   Older :132   Median :136.00   Late  : 30  
-##  ID_004 :  1                  Parity_4:47                Mean   :136.06               
-##  ID_005 :  1                  Parity_5:10                3rd Qu.:175.00               
-##  ID_006 :  1                  Parity_6:15                Max.   :274.00               
-##  (Other):256                                                                          
-##    weight_kg           crl_cm           crl_mm       head_width_mm    head_length_mm  
-##  Min.   : 0.0010   Min.   :  2.00   Min.   :  20.0   Min.   :  3.00   Min.   :  5.00  
-##  1st Qu.: 0.2537   1st Qu.: 18.30   1st Qu.: 183.0   1st Qu.: 39.24   1st Qu.: 55.52  
-##  Median : 1.7805   Median : 35.65   Median : 356.5   Median : 63.33   Median :101.28  
-##  Mean   : 5.0029   Mean   : 37.90   Mean   : 379.0   Mean   : 62.34   Mean   :103.29  
-##  3rd Qu.: 6.9250   3rd Qu.: 54.60   3rd Qu.: 546.0   3rd Qu.: 84.02   3rd Qu.:145.54  
-##  Max.   :41.6000   Max.   :101.30   Max.   :1013.0   Max.   :152.00   Max.   :239.00  
-##                                                                                       
-##  hair_coronary_band hair_ear  hair_eyelid hair_tail hair_hornbud     tactile_muzzle
-##  No :202            No :221   No :197     No :179   No :175      Visible    :169   
-##  Yes: 60            Yes: 41   Yes: 65     Yes: 83   Yes: 87      Not visible: 34   
-##                                                                  Hairsack   : 59   
-##                                                                                    
-##                                                                                    
-##                                                                                    
-##                                                                                    
-##     tactile_eyebrow    tactile_eyelash eye_op_close      papillae_tongue eyelid   
-##  Visible    :169    Visible    :109    Closed:225   None         : 35    No : 21  
-##  Not visible: 43    Not visible:130    Open  : 37   Furthest back: 28    Yes:241  
-##  Hairsack   : 50    Hairsack   : 23                 Large front  : 35             
-##                                                     Whole tongue :164             
-##                                                                                   
-##                                                                                   
+##        ID            sex           parity   parity_group    age_days     
+##  ID_001 :  1   Female  :110   Parity_1:47   First : 47   Min.   : 25.00  
+##  ID_002 :  1   Male    :128   Parity_2:83   Second: 83   1st Qu.: 95.25  
+##  ID_003 :  1   Non Diff: 24   Parity_3:60   Older :132   Median :136.00  
+##  ID_004 :  1                  Parity_4:47                Mean   :136.06  
+##  ID_005 :  1                  Parity_5:10                3rd Qu.:175.00  
+##  ID_006 :  1                  Parity_6:15                Max.   :274.00  
+##  (Other):256                                                             
+##   age_group     weight_kg           crl_cm           crl_mm      
+##  Early : 73   Min.   : 0.0010   Min.   :  2.00   Min.   :  20.0  
+##  Middle:159   1st Qu.: 0.2537   1st Qu.: 18.30   1st Qu.: 183.0  
+##  Late  : 30   Median : 1.7805   Median : 35.65   Median : 356.5  
+##               Mean   : 5.0029   Mean   : 37.90   Mean   : 379.0  
+##               3rd Qu.: 6.9250   3rd Qu.: 54.60   3rd Qu.: 546.0  
+##               Max.   :41.6000   Max.   :101.30   Max.   :1013.0  
+##                                                                  
+##  head_width_mm    head_length_mm   hair_coronary_band hair_ear  hair_eyelid
+##  Min.   :  3.00   Min.   :  5.00   No :202            No :221   No :197    
+##  1st Qu.: 39.24   1st Qu.: 55.52   Yes: 60            Yes: 41   Yes: 65    
+##  Median : 63.33   Median :101.28                                           
+##  Mean   : 62.34   Mean   :103.29                                           
+##  3rd Qu.: 84.02   3rd Qu.:145.54                                           
+##  Max.   :152.00   Max.   :239.00                                           
+##                                                                            
+##  hair_tail hair_hornbud     tactile_muzzle    tactile_eyebrow
+##  No :179   No :175      Visible    :169    Visible    :169   
+##  Yes: 83   Yes: 87      Not visible: 34    Not visible: 43   
+##                         Hairsack   : 59    Hairsack   : 50   
+##                                                              
+##                                                              
+##                                                              
+##                                                              
+##     tactile_eyelash eye_op_close      papillae_tongue eyelid   
+##  Visible    :109    Closed:225   None         : 35    No : 21  
+##  Not visible:130    Open  : 37   Furthest back: 28    Yes:241  
+##  Hairsack   : 23                 Large front  : 35             
+##                                  Whole tongue :164             
+##                                                                
+##                                                                
 ## 
 ```
 
@@ -1688,35 +1829,40 @@ sessionInfo()
 ```
 
 ```
-## R version 3.5.2 (2018-12-20)
+## R version 3.6.2 (2019-12-12)
 ## Platform: x86_64-apple-darwin15.6.0 (64-bit)
 ## Running under: macOS High Sierra 10.13.6
 ## 
 ## Matrix products: default
-## BLAS: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRblas.0.dylib
-## LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
+## BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
-## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## [1] en_GB.UTF-8/en_GB.UTF-8/en_GB.UTF-8/C/en_GB.UTF-8/en_GB.UTF-8
 ## 
 ## attached base packages:
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] lubridate_1.7.4 bindrcpp_0.2.2  readxl_1.2.0    forcats_0.3.0   stringr_1.4.0   dplyr_0.7.8    
-##  [7] purrr_0.3.0     readr_1.3.1     tidyr_0.8.2     tibble_2.0.1    ggplot2_3.1.0   tidyverse_1.2.1
+##  [1] lubridate_1.7.4 readxl_1.3.1    forcats_0.4.0   stringr_1.4.0  
+##  [5] dplyr_0.8.3     purrr_0.3.3     readr_1.3.1     tidyr_1.0.2    
+##  [9] tibble_2.1.3    ggplot2_3.2.1   tidyverse_1.3.0
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.0        cellranger_1.1.0  pillar_1.3.1      compiler_3.5.2    plyr_1.8.4       
-##  [6] bindr_0.1.1       tools_3.5.2       digest_0.6.18     jsonlite_1.6      evaluate_0.12    
-## [11] nlme_3.1-137      gtable_0.2.0      lattice_0.20-38   pkgconfig_2.0.2   rlang_0.3.1      
-## [16] cli_1.0.1         rstudioapi_0.9.0  yaml_2.2.0        haven_2.0.0       withr_2.1.2      
-## [21] xml2_1.2.0        httr_1.4.0        knitr_1.20        hms_0.4.2         generics_0.0.2   
-## [26] grid_3.5.2        tidyselect_0.2.5  glue_1.3.0        R6_2.3.0          fansi_0.4.0      
-## [31] rmarkdown_1.11    modelr_0.1.3      magrittr_1.5      backports_1.1.3   scales_1.0.0.9000
-## [36] htmltools_0.3.6   rvest_0.3.2       assertthat_0.2.0  colorspace_1.4-0  labeling_0.3     
-## [41] utf8_1.1.4        stringi_1.2.4     lazyeval_0.2.1    munsell_0.5.0     broom_0.5.1      
-## [46] crayon_1.3.4
+##  [1] tidyselect_1.0.0 xfun_0.12        haven_2.2.0      lattice_0.20-38 
+##  [5] colorspace_1.4-1 vctrs_0.2.2      generics_0.0.2   htmltools_0.4.0 
+##  [9] yaml_2.2.0       utf8_1.1.4       rlang_0.4.4      pillar_1.4.3    
+## [13] withr_2.1.2      glue_1.3.1       DBI_1.1.0        dbplyr_1.4.2    
+## [17] modelr_0.1.5     lifecycle_0.1.0  munsell_0.5.0    gtable_0.3.0    
+## [21] cellranger_1.1.0 rvest_0.3.5      evaluate_0.14    labeling_0.3    
+## [25] knitr_1.27       fansi_0.4.1      broom_0.5.4      Rcpp_1.0.3      
+## [29] scales_1.1.0     backports_1.1.5  jsonlite_1.6     farver_2.0.3    
+## [33] fs_1.3.1         hms_0.5.3        digest_0.6.23    stringi_1.4.5   
+## [37] grid_3.6.2       cli_2.0.1        tools_3.6.2      magrittr_1.5    
+## [41] lazyeval_0.2.2   crayon_1.3.4     pkgconfig_2.0.3  ellipsis_0.3.0  
+## [45] xml2_1.2.2       reprex_0.3.0     assertthat_0.2.1 rmarkdown_2.1   
+## [49] httr_1.4.1       rstudioapi_0.10  R6_2.4.1         nlme_3.1-143    
+## [53] compiler_3.6.2
 ```
 
 --- 
@@ -1789,26 +1935,33 @@ fetuses %>%
 ```
 
 ```
-##      parity         age_days        weight_kg           crl_cm       head_width_mm   
-##  Min.   :1.000   Min.   : 25.00   Min.   : 0.0010   Min.   :  2.00   Min.   :  3.00  
-##  1st Qu.:2.000   1st Qu.: 95.25   1st Qu.: 0.2537   1st Qu.: 18.30   1st Qu.: 39.24  
-##  Median :3.000   Median :136.00   Median : 1.7805   Median : 35.65   Median : 63.33  
-##  Mean   :2.752   Mean   :136.06   Mean   : 5.0029   Mean   : 37.90   Mean   : 62.34  
-##  3rd Qu.:4.000   3rd Qu.:175.00   3rd Qu.: 6.9250   3rd Qu.: 54.60   3rd Qu.: 84.02  
-##  Max.   :6.000   Max.   :274.00   Max.   :41.6000   Max.   :101.30   Max.   :152.00  
-##  head_length_mm   hair_coronary_band hair_ear hair_eyelid hair_tail hair_hornbud     tactile_muzzle
-##  Min.   :  5.00   Y: 60              Y: 41    Y: 65       Y: 83     Y: 87        Visible    :169   
-##  1st Qu.: 55.52   N:202              N:221    N:197       N:179     N:175        Not visible: 34   
-##  Median :101.28                                                                  Hairsack   : 59   
-##  Mean   :103.29                                                                                    
-##  3rd Qu.:145.54                                                                                    
-##  Max.   :239.00                                                                                    
-##     tactile_eyebrow    tactile_eyelash eye_op_close      papillae_tongue eyelid        sex     
-##  Visible    :169    Visible    :109    Open  : 37   Whole tongue :164    Y:241   Female  :110  
-##  Not visible: 43    Not visible:130    Closed:225   None         : 35    N: 21   Male    :128  
-##  Hairsack   : 50    Hairsack   : 23                 Large front  : 35            Non Diff: 24  
-##                                                     Furthest back: 28                          
-##                                                                                                
+##      parity         age_days        weight_kg           crl_cm      
+##  Min.   :1.000   Min.   : 25.00   Min.   : 0.0010   Min.   :  2.00  
+##  1st Qu.:2.000   1st Qu.: 95.25   1st Qu.: 0.2537   1st Qu.: 18.30  
+##  Median :3.000   Median :136.00   Median : 1.7805   Median : 35.65  
+##  Mean   :2.752   Mean   :136.06   Mean   : 5.0029   Mean   : 37.90  
+##  3rd Qu.:4.000   3rd Qu.:175.00   3rd Qu.: 6.9250   3rd Qu.: 54.60  
+##  Max.   :6.000   Max.   :274.00   Max.   :41.6000   Max.   :101.30  
+##  head_width_mm    head_length_mm   hair_coronary_band hair_ear hair_eyelid
+##  Min.   :  3.00   Min.   :  5.00   Y: 60              Y: 41    Y: 65      
+##  1st Qu.: 39.24   1st Qu.: 55.52   N:202              N:221    N:197      
+##  Median : 63.33   Median :101.28                                          
+##  Mean   : 62.34   Mean   :103.29                                          
+##  3rd Qu.: 84.02   3rd Qu.:145.54                                          
+##  Max.   :152.00   Max.   :239.00                                          
+##  hair_tail hair_hornbud     tactile_muzzle    tactile_eyebrow
+##  Y: 83     Y: 87        Visible    :169    Visible    :169   
+##  N:179     N:175        Not visible: 34    Not visible: 43   
+##                         Hairsack   : 59    Hairsack   : 50   
+##                                                              
+##                                                              
+##                                                              
+##     tactile_eyelash eye_op_close      papillae_tongue eyelid        sex     
+##  Visible    :109    Open  : 37   Whole tongue :164    Y:241   Female  :110  
+##  Not visible:130    Closed:225   None         : 35    N: 21   Male    :128  
+##  Hairsack   : 23                 Large front  : 35            Non Diff: 24  
+##                                  Furthest back: 28                          
+##                                                                             
 ## 
 ```
 
@@ -1872,9 +2025,12 @@ Convert the tactile hair variables into factors:
 
 ```r
 fetuses <- fetuses %>%
-	mutate(tactile_muzzle = parse_factor(tactile_muzzle, levels=c('Visible','Not visible','Hairsack'))) %>%
-	mutate(tactile_eyebrow = parse_factor(tactile_eyebrow, levels=c('Visible','Not visible','Hairsack'))) %>%
-	mutate(tactile_eyelash = parse_factor(tactile_eyelash, levels=c('Visible','Not visible','Hairsack')))
+	mutate(tactile_muzzle = parse_factor(tactile_muzzle, 
+	                     levels=c('Visible','Not visible','Hairsack'))) %>%
+	mutate(tactile_eyebrow = parse_factor(tactile_eyebrow,
+	                     levels=c('Visible','Not visible','Hairsack'))) %>%
+	mutate(tactile_eyelash = parse_factor(tactile_eyelash, 
+	                     levels=c('Visible','Not visible','Hairsack')))
 ```
 
 Convert the remaining 4 variables into factors:
@@ -1932,7 +2088,8 @@ We can also re-order the data frame to keep important variables first, and relat
 
 ```r
 fetuses <- fetuses %>%
-	select(ID, sex, starts_with('parity'), starts_with('age'), weight_kg, crl_cm, crl_mm, starts_with('head'), everything())
+	select(ID, sex, starts_with('parity'), starts_with('age'), 
+	       weight_kg, crl_cm, crl_mm, starts_with('head'), everything())
 ```
 
 Check the new order:	
@@ -1980,37 +2137,45 @@ fetuses %>%
 ```
 
 ```
-##        ID            sex           parity   parity_group    age_days       age_group  
-##  ID_001 :  1   Female  :110   Parity_1:47   First : 47   Min.   : 25.00   Early : 73  
-##  ID_002 :  1   Male    :128   Parity_2:83   Second: 83   1st Qu.: 95.25   Middle:159  
-##  ID_003 :  1   Non Diff: 24   Parity_3:60   Older :132   Median :136.00   Late  : 30  
-##  ID_004 :  1                  Parity_4:47                Mean   :136.06               
-##  ID_005 :  1                  Parity_5:10                3rd Qu.:175.00               
-##  ID_006 :  1                  Parity_6:15                Max.   :274.00               
-##  (Other):256                                                                          
-##    weight_kg           crl_cm           crl_mm       head_width_mm    head_length_mm  
-##  Min.   : 0.0010   Min.   :  2.00   Min.   :  20.0   Min.   :  3.00   Min.   :  5.00  
-##  1st Qu.: 0.2537   1st Qu.: 18.30   1st Qu.: 183.0   1st Qu.: 39.24   1st Qu.: 55.52  
-##  Median : 1.7805   Median : 35.65   Median : 356.5   Median : 63.33   Median :101.28  
-##  Mean   : 5.0029   Mean   : 37.90   Mean   : 379.0   Mean   : 62.34   Mean   :103.29  
-##  3rd Qu.: 6.9250   3rd Qu.: 54.60   3rd Qu.: 546.0   3rd Qu.: 84.02   3rd Qu.:145.54  
-##  Max.   :41.6000   Max.   :101.30   Max.   :1013.0   Max.   :152.00   Max.   :239.00  
-##                                                                                       
-##  hair_coronary_band hair_ear  hair_eyelid hair_tail hair_hornbud     tactile_muzzle
-##  No :202            No :221   No :197     No :179   No :175      Visible    :169   
-##  Yes: 60            Yes: 41   Yes: 65     Yes: 83   Yes: 87      Not visible: 34   
-##                                                                  Hairsack   : 59   
-##                                                                                    
-##                                                                                    
-##                                                                                    
-##                                                                                    
-##     tactile_eyebrow    tactile_eyelash eye_op_close      papillae_tongue eyelid   
-##  Visible    :169    Visible    :109    Closed:225   None         : 35    No : 21  
-##  Not visible: 43    Not visible:130    Open  : 37   Furthest back: 28    Yes:241  
-##  Hairsack   : 50    Hairsack   : 23                 Large front  : 35             
-##                                                     Whole tongue :164             
-##                                                                                   
-##                                                                                   
+##        ID            sex           parity   parity_group    age_days     
+##  ID_001 :  1   Female  :110   Parity_1:47   First : 47   Min.   : 25.00  
+##  ID_002 :  1   Male    :128   Parity_2:83   Second: 83   1st Qu.: 95.25  
+##  ID_003 :  1   Non Diff: 24   Parity_3:60   Older :132   Median :136.00  
+##  ID_004 :  1                  Parity_4:47                Mean   :136.06  
+##  ID_005 :  1                  Parity_5:10                3rd Qu.:175.00  
+##  ID_006 :  1                  Parity_6:15                Max.   :274.00  
+##  (Other):256                                                             
+##   age_group     weight_kg           crl_cm           crl_mm      
+##  Early : 73   Min.   : 0.0010   Min.   :  2.00   Min.   :  20.0  
+##  Middle:159   1st Qu.: 0.2537   1st Qu.: 18.30   1st Qu.: 183.0  
+##  Late  : 30   Median : 1.7805   Median : 35.65   Median : 356.5  
+##               Mean   : 5.0029   Mean   : 37.90   Mean   : 379.0  
+##               3rd Qu.: 6.9250   3rd Qu.: 54.60   3rd Qu.: 546.0  
+##               Max.   :41.6000   Max.   :101.30   Max.   :1013.0  
+##                                                                  
+##  head_width_mm    head_length_mm   hair_coronary_band hair_ear  hair_eyelid
+##  Min.   :  3.00   Min.   :  5.00   No :202            No :221   No :197    
+##  1st Qu.: 39.24   1st Qu.: 55.52   Yes: 60            Yes: 41   Yes: 65    
+##  Median : 63.33   Median :101.28                                           
+##  Mean   : 62.34   Mean   :103.29                                           
+##  3rd Qu.: 84.02   3rd Qu.:145.54                                           
+##  Max.   :152.00   Max.   :239.00                                           
+##                                                                            
+##  hair_tail hair_hornbud     tactile_muzzle    tactile_eyebrow
+##  No :179   No :175      Visible    :169    Visible    :169   
+##  Yes: 83   Yes: 87      Not visible: 34    Not visible: 43   
+##                         Hairsack   : 59    Hairsack   : 50   
+##                                                              
+##                                                              
+##                                                              
+##                                                              
+##     tactile_eyelash eye_op_close      papillae_tongue eyelid   
+##  Visible    :109    Closed:225   None         : 35    No : 21  
+##  Not visible:130    Open  : 37   Furthest back: 28    Yes:241  
+##  Hairsack   : 23                 Large front  : 35             
+##                                  Whole tongue :164             
+##                                                                
+##                                                                
 ## 
 ```
 
